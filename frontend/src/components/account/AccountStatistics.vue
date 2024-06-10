@@ -1,33 +1,38 @@
 <template>
-    <div>
+    <div id="accountStatistics">
+        <div class="outer-btn">
+            <button class="btn btn-primary btn-regi" @click="toRegistration">입출금 등록</button>
+        </div>
         <h3>월별 지출 차트</h3>
+        <div class="chart-header">
+            입금 : <div class="chart-deposit"></div>
+            출금 : <div class="chart-withdraw"></div>
+        </div>
         <Chart
-            :size="{ width:500, height:420 }"
+            :size="{ width:800, height:420 }"
             :data="data"
             :margin="margin"
             :direction="direction"
             :axis="axis">
             <template #layers>
                 <Grid strokeDasharray="2,2"></Grid>
-                <Bar :dataKeys="['name', 'deposit']" :barStyle="{ fill: '#90e0ef' }" />
-                <Bar :dataKeys="['name', 'withdraw']" :barStyle="{ fill: '#0096c7' }" />
+                <Bar :dataKeys="['month', 'deposit']" :barStyle="{ fill: '#90e0ef' }" />
+                <Bar :dataKeys="['month', 'withdraw']" :barStyle="{ fill: '#0096c7' }" />
             </template>
             <template #widgets>
                 <Tooltip
                     borderColor="#48CAE4"
                     :config="{
-                    pl: { color: '#90e0ef' },
-                    avg: { color: '#0096c7' },
-                    inc: { color: '#48cae4' }
                     }"
                 />
             </template>
         </Chart>
-
+        <br> <br>
         <h3>최근 거래 내역</h3>
-        <table border="1">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>번호</th>
                     <th>날짜</th>
                     <th>타입</th>
                     <th>카테고리</th>
@@ -36,7 +41,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="d in sortedData">
+                <tr v-for="(d, idx) in sortedData">
+                    <td>
+                        {{ idx }}
+                    </td>
                     <td>
                         {{ d.createAt }}
                     </td>
@@ -69,18 +77,18 @@ export default {
         //userID는 params 또는 부모컴포넌트로부터 받아오기
         let userId = this.userId;
         let chartData = [
-            { name : "Jan", deposit : 0, withdraw : 0 },
-            { name : "Feb", deposit : 0, withdraw : 0 },
-            { name : "Apr", deposit : 0, withdraw : 0 },
-            { name : "Mar", deposit : 0, withdraw : 0 },
-            { name : "May", deposit : 0, withdraw : 0 },
-            { name : "Jun", deposit : 0, withdraw : 0 },
-            { name : "Jul", deposit : 0, withdraw : 0 },
-            { name : "Aug", deposit : 0, withdraw : 0 },
-            { name : "Sep", deposit : 0, withdraw : 0 },
-            { name : "Oct", deposit : 0, withdraw : 0 },
-            { name : "Nov", deposit : 0, withdraw : 0 },
-            { name : "Dec", deposit : 0, withdraw : 0 },
+            { month : "Jan", deposit : 0, withdraw : 0 },
+            { month : "Feb", deposit : 0, withdraw : 0 },
+            { month : "Apr", deposit : 0, withdraw : 0 },
+            { month : "Mar", deposit : 0, withdraw : 0 },
+            { month : "May", deposit : 0, withdraw : 0 },
+            { month : "Jun", deposit : 0, withdraw : 0 },
+            { month : "Jul", deposit : 0, withdraw : 0 },
+            { month : "Aug", deposit : 0, withdraw : 0 },
+            { month : "Sep", deposit : 0, withdraw : 0 },
+            { month : "Oct", deposit : 0, withdraw : 0 },
+            { month : "Nov", deposit : 0, withdraw : 0 },
+            { month : "Dec", deposit : 0, withdraw : 0 },
         ];
 
         //서버로부터 데이터 받아오기
@@ -146,9 +154,40 @@ export default {
                 }
             }
         }
+    },
+    methods:{
+        toRegistration : function(){
+            this.$router.push('accountRegistration');
+        }
     }
 }
 </script>
-<style lang="">
-    
+<style scoped>
+    #accountStatistics{
+        text-align: center;
+    }
+    .btn-regi{
+        margin: 10px 20px 10px 0px;
+    }
+    .outer-btn{
+        text-align: right;
+    }
+    .chart-header{
+        text-align: right;
+    }
+    .chart-deposit{
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        background-color: #90e0ef;
+        vertical-align: middle;
+    }
+    .chart-withdraw{
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        background-color: #0096c7;
+        vertical-align: middle;
+        margin-right: 20px;
+    }
 </style>
