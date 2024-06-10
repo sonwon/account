@@ -18,7 +18,7 @@
             "content" : "용돈 입금"
         },
         {
-            "userId" : 2,
+            "userId" : 1,
             "type" : "출금",
             "amount" : 2000,
             "createAt" : "2024-06-11",
@@ -26,7 +26,7 @@
             "content" : "편의점 출금"
         },
         {
-            "userId" : 3,
+            "userId" : 1,
             "type" : "출금",
             "amount" : 1000,
             "createAt" : "2024-06-12",
