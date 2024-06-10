@@ -4,6 +4,7 @@
     <router-view></router-view>
   </div>
 </template>
+
 <script>
 import Sidebar from './components/sidebar/Sidebar.vue';
 
