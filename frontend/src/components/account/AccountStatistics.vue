@@ -1,7 +1,7 @@
 <template>
     <div id="accountStatistics">
         <div class="outer-btn">
-            <button class="btn btn-primary btn-regi" @click="toRegistration">입출금 등록</button>
+            <button class="btn btn-warning btn-regi" @click="toRegistration">입출금 등록</button>
         </div>
         <h3>월별 지출 차트</h3>
         <div class="chart-header">
