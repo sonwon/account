@@ -6,13 +6,11 @@
         </div>
         <div class="list">
             <ul class="menu">
-                <li v-for="(item, index) in menuItems" :key="index" :class="{ active: selectedItem === index }"
-                    @click="selectItem(index)" style="line-height: 200%;" >
-                    <!-- <router-link :to="item.link">{{ item.name }}</router-link>
-                      -->
-                      <p :style="{fontWeight: selectedItem === index ? 'bold' : 'normal'}">{{ item.name }}</p>
+                <li v-for="(item, index) in menuItems" :key="index" :class="{ active: selectedItem === item.name }"
+                    @click="selectItem(item)" style="line-height: 200%;" >                    
+                     {{item.name}}
                 </li>
-            </ul>
+            </ul>            
         </div>
         <div class="footer">
             <p>{{ name }}</p>
@@ -29,10 +27,10 @@ export default {
         return {
             name: "mount에서 가져올 예정",
             menuItems: [
-                { name: "마이페이지", link: "" },
-                { name: "월별 제정 요약", link: "" },
-                { name: "거래 내역 조회", link: "" },
-                { name: "입출금 등록", link: "" }
+                { name: "마이페이지", link: "/" },
+                { name: "월별 제정 요약", link: "/" },
+                { name: "거래 내역 조회", link: "/" },
+                { name: "입출금 등록", link: "/" }
             ],
             selectedItem: null
         }
@@ -41,8 +39,10 @@ export default {
 
     },
     methods: {
-        selectItem(index) {
-            this.selectedItem = index;
+        selectItem(item) {
+            this.selectedItem = item.name;
+            console.log(item)
+            this.$router.push(item.link)
         }
     }
 }
@@ -53,7 +53,6 @@ export default {
     width: 30%;
     min-width: 400px;
     height: 100vh;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -66,7 +65,9 @@ export default {
     padding: 20px;
 
 }
-
+.custom-link:hover {
+    color: white;
+}
 .menu {
     list-style-type: none;
     transition: background-color 0.3s;
@@ -81,8 +82,7 @@ export default {
     margin-bottom: 20px; 
     border-radius: 7%;
     cursor: pointer;
-    transition: background-color 0.3s;
-    
+    transition: background-color 0.5s;
 }
 
 
@@ -102,7 +102,6 @@ export default {
 .menu li:hover {
     color: black;
     background-color: orange;
-    display: block;
     font-weight: bold;
 }
 
