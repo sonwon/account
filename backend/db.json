@@ -1,8 +1,37 @@
 {
     "users":[
-
+        {
+            "userId" : 1,
+            "name" : "홍길동",
+            "email" : "admin@gmail.com",
+            "password" : "1234",
+            "balance" : 7000
+        }
     ],
     "deposit":[
-        
+        {
+            "userId" : 1,
+            "type" : "입금",
+            "amount" : 10000,
+            "createAt" : "2024-06-10",
+            "category" : "용돈",
+            "content" : "용돈 입금"
+        },
+        {
+            "userId" : 2,
+            "type" : "출금",
+            "amount" : 2000,
+            "createAt" : "2024-06-11",
+            "category" : "생활금",
+            "content" : "편의점 출금"
+        },
+        {
+            "userId" : 3,
+            "type" : "출금",
+            "amount" : 1000,
+            "createAt" : "2024-06-12",
+            "category" : "생활금",
+            "content" : "편의점 출금"
+        }
     ]
 }
