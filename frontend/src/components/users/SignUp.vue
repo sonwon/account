@@ -1,4 +1,5 @@
 <template>
+  <div class="signUp-outer">
     <form class="container-lg" @submit.prevent="onSubmitPrevent">
       <InputFormItem
         label="이메일 (아이디)"
@@ -35,12 +36,13 @@
         :minLength="8"
       />
       <div class="w-100 mt-3">
-        <button class="w-100 btn btn-primary" type="submit">
+        <button class="w-100 btn btn-warning" type="submit">
           회원가입
         </button>
       </div>
     </form>
-  </template>
+  </div>
+</template>
   
   <script>
   import { ref } from 'vue';
@@ -138,5 +140,8 @@
   
   <style scoped>
   /* Add any specific styles if necessary */
+  .signUp-outer{
+    width : 800px;
+  }
   </style>
   
