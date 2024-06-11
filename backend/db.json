@@ -1,37 +1,69 @@
 {
-    "users":[
-        {
-            "userId" : 1,
-            "name" : "홍길동",
-            "email" : "admin@gmail.com",
-            "password" : "1234",
-            "balance" : 7000
-        }
-    ],
-    "deposit":[
-        {
-            "userId" : 1,
-            "type" : "입금",
-            "amount" : 10000,
-            "createAt" : "2024-06-10",
-            "category" : "용돈",
-            "content" : "용돈 입금"
-        },
-        {
-            "userId" : 2,
-            "type" : "출금",
-            "amount" : 2000,
-            "createAt" : "2024-06-11",
-            "category" : "생활금",
-            "content" : "편의점 출금"
-        },
-        {
-            "userId" : 3,
-            "type" : "출금",
-            "amount" : 1000,
-            "createAt" : "2024-06-12",
-            "category" : "생활금",
-            "content" : "편의점 출금"
-        }
-    ]
+  "users": [
+    {
+      "userId": 1,
+      "name": "홍길동",
+      "email": "admin@gmail.com",
+      "password": "dltjgus119@@",
+      "balance": 12000,
+      "id": "645f"
+    },
+    {
+      "id": "d052",
+      "email": "blackbean71101897@gmail.com",
+      "username": "이서현",
+      "password": "dltjgus119@@"
+    },
+    {
+      "id": "8792",
+      "email": "blackbean71101897@gmail.com",
+      "username": "이서현",
+      "password": "dltjgus119@@"
+    },
+    {
+      "id": "1b36",
+      "email": "blackbean71101897@gmail.com",
+      "username": "이서현",
+      "password": "dltjgus119@@",
+      "balance": 0
+    }
+  ],
+  "deposit": [
+    {
+      "userId": 1,
+      "type": "입금",
+      "amount": 10000,
+      "createAt": "2024-06-10",
+      "category": "용돈",
+      "content": "용돈 입금",
+      "id": "b03d"
+    },
+    {
+      "userId": 1,
+      "type": "출금",
+      "amount": 2000,
+      "createAt": "2024-06-11",
+      "category": "생활금",
+      "content": "편의점 출금",
+      "id": "cf39"
+    },
+    {
+      "userId": 1,
+      "type": "출금",
+      "amount": 1000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "편의점 출금",
+      "id": "4c4c"
+    },
+    {
+      "id": "7d4a",
+      "userId": 1,
+      "type": "입금",
+      "amount": "5000",
+      "createAt": "2024-06-11",
+      "category": "생활금",
+      "content": "생활금 입금"
+    }
+  ]
 }
