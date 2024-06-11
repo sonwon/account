@@ -14,7 +14,7 @@
         </div>
         <div class="footer">
             <p>{{ name }}</p>
-            <router-link to="/" style="color:gray">로그아웃</router-link>
+            <router-link to="/" style="color:gray" @click.prevent="logout">로그아웃</router-link>
         </div>
     </div>
 
@@ -44,6 +44,13 @@ export default {
         selectItem(item) {
             this.selectedItem = item.name;
             this.$router.push(item.link)
+        },
+
+        logout(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            this.$router.push('/');
+            console.log('로그아웃');
         }
     }
 }
