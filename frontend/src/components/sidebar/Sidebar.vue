@@ -29,7 +29,7 @@ export default {
             menuItems: [
                 { name: "마이페이지", link: "/" },
                 { name: "월별 제정 요약", link: "/" },
-                { name: "거래 내역 조회", link: "/accountStatistics" },
+                { name: "거래 내역 조회", link: "/Calendar" },
                 { name: "입출금 등록", link: "/accountRegistration" }
             ],
             selectedItem: null
