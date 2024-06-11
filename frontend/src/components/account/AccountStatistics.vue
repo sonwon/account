@@ -1,68 +1,70 @@
 <template>
     <div id="accountStatistics">
-        <div class="outer-btn">
-            <button class="btn btn-warning btn-regi" @click="toRegistration">입출금 등록</button>
+        <div class="chart-outer">
+            <h3>월별 지출 차트</h3>
+            <div class="chart-header">
+                입금 : <div class="chart-deposit"></div>
+                출금 : <div class="chart-withdraw"></div>
+            </div>
+            <Chart
+                :size="{ width:800, height:420 }"
+                :data="data"
+                :margin="margin"
+                :direction="direction"
+                :axis="axis">
+                <template #layers>
+                    <Grid strokeDasharray="2,2"></Grid>
+                    <Bar :dataKeys="['month', 'deposit']" :barStyle="{ fill: '#F7D280' }" />
+                    <Bar :dataKeys="['month', 'withdraw']" :barStyle="{ fill: '#F7A50C' }" />
+                </template>
+                <template #widgets>
+                    <Tooltip
+                        borderColor="#48CAE4"
+                        :config="{
+                            deposit: { color: '#90e0ef' },
+                            withdraw: { color: '#0096c7' },
+                        }"
+                    />
+                </template>
+            </Chart>
         </div>
-        <h3>월별 지출 차트</h3>
-        <div class="chart-header">
-            입금 : <div class="chart-deposit"></div>
-            출금 : <div class="chart-withdraw"></div>
+        <div class="list-outer">
+            <h3>최근 거래 내역</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>날짜</th>
+                        <th>타입</th>
+                        <th>카테고리</th>
+                        <th>금액</th>
+                        <th>메모</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(d, idx) in sortedData">
+                        <td>
+                            {{ idx }}
+                        </td>
+                        <td>
+                            {{ d.createAt }}
+                        </td>
+                        <td>
+                            {{ d.type }}
+                        </td>
+                        <td>
+                            {{ d.category }}
+                        </td>
+                        <td>
+                            {{ d.amount }}
+                        </td>
+                        <td>
+                            {{ d.content }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <Chart
-            :size="{ width:800, height:420 }"
-            :data="data"
-            :margin="margin"
-            :direction="direction"
-            :axis="axis">
-            <template #layers>
-                <Grid strokeDasharray="2,2"></Grid>
-                <Bar :dataKeys="['month', 'deposit']" :barStyle="{ fill: '#90e0ef' }" />
-                <Bar :dataKeys="['month', 'withdraw']" :barStyle="{ fill: '#0096c7' }" />
-            </template>
-            <template #widgets>
-                <Tooltip
-                    borderColor="#48CAE4"
-                    :config="{
-                    }"
-                />
-            </template>
-        </Chart>
-        <br> <br>
-        <h3>최근 거래 내역</h3>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>날짜</th>
-                    <th>타입</th>
-                    <th>카테고리</th>
-                    <th>금액</th>
-                    <th>메모</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(d, idx) in sortedData">
-                    <td>
-                        {{ idx }}
-                    </td>
-                    <td>
-                        {{ d.createAt }}
-                    </td>
-                    <td>
-                        {{ d.type }}
-                    </td>
-                    <td>
-                        {{ d.category }}
-                    </td>
-                    <td>
-                        {{ d.amount }}
-                    </td>
-                    <td>
-                        {{ d.content }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </template>
 
@@ -104,10 +106,10 @@ export default {
                     month = month.charAt(0) === '0' ? month.charAt(1) : month;
                     let month_number = parseInt(month);
                     if(data.type === '입금'){
-                        chartData[month_number-1].deposit += data.amount;
+                        chartData[month_number-1].deposit += parseInt(data.amount);
                     }
                     else{
-                        chartData[month_number-1].withdraw += data.amount;
+                        chartData[month_number-1].withdraw += parseInt(data.amount);
                     }
                 })
 
@@ -155,22 +157,13 @@ export default {
             }
         }
     },
-    methods:{
-        toRegistration : function(){
-            this.$router.push('accountRegistration');
-        }
-    }
 }
 </script>
 <style scoped>
     #accountStatistics{
         text-align: center;
-    }
-    .btn-regi{
-        margin: 10px 20px 10px 0px;
-    }
-    .outer-btn{
-        text-align: right;
+        position: relative;
+        padding: 150px;
     }
     .chart-header{
         text-align: right;
@@ -179,15 +172,18 @@ export default {
         display: inline-block;
         width: 1rem;
         height: 1rem;
-        background-color: #90e0ef;
+        background-color: #F7D280;
         vertical-align: middle;
     }
     .chart-withdraw{
         display: inline-block;
         width: 1rem;
         height: 1rem;
-        background-color: #0096c7;
+        background-color: #F7A50C;
         vertical-align: middle;
         margin-right: 20px;
+    }
+    .chart-outer{
+        margin-bottom: 80px;
     }
 </style>
