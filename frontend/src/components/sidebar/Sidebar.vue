@@ -27,14 +27,9 @@ export default {
         return {
             name: "mount에서 가져올 예정",
             menuItems: [
-                { name: "마이페이지", link: "/" },
-<<<<<<< HEAD
+                { name: "마이페이지", link: "/my-page" },
                 { name: "월별 제정 요약", link: "/accountStatistics" },
-                { name: "거래 내역 조회", link: "/" },
-=======
-                { name: "월별 제정 요약", link: "/" },
                 { name: "거래 내역 조회", link: "/Calendar" },
->>>>>>> dev
                 { name: "입출금 등록", link: "/accountRegistration" }
             ],
             selectedItem: null,
