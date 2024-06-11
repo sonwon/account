@@ -1,15 +1,12 @@
 <template>
-    <div class="container mt-3 registration-outer">
-        <h3>입출금 등록</h3>
-        <form @submit.prevent="submit">
+    <div class="container mt-3 update-outer">
+        <h3>가계부 수정</h3> <br>
+        <form @submit.prevent="update">
             <div class="mb-5 mt-3">
                 <label class="form-label">날짜 : &ensp;</label>
                 <input class="year-input" type="text" v-model="year">&ensp;-&ensp;
                 <input class="month-input" type="text" v-model="month">&ensp;-&ensp;
                 <input class="day-input" type="text" v-model="day">
-            </div>
-            <div class="mb-5 mt-3">
-                현재 금액 : <b>{{ this.balance }}</b>
             </div>
             <div class="mb-5 mt-3 select">
                 <input type="radio" v-model="type" name="type" id="deposit" value="입금" checked><label for="deposit">입금</label>
@@ -30,7 +27,7 @@
                 <textarea class="form-control" rows="5" id="content" v-model="content"></textarea>
             </div>
             <div class="mt-3 btn-outer">
-                <input class="btn btn-warning btn-submit" type="submit"/>
+                <input class="btn btn-warning btn-submit" type="submit" value="수정"/>
                 <button class="btn btn-secondary btn-cancel" @click.prevent="cancel">취소</button>
             </div>
         </form>
@@ -40,16 +37,18 @@
 import axios from 'axios'
 
 export default {
-    name : 'AccountRegistration',
+    name : "AccountUpdate",
     data(){
         return{
+            accountId : "",
             userId : "",
             date : "",
-            year : "",
             month : "",
             day : "",
-            type : "입금",
+            type : "",
+            oldType : "",
             amount : 0,
+            oldAmount : 0,
             options : [
                 "생활금", "공과금", "월급"
             ],
@@ -59,39 +58,40 @@ export default {
         }
     },
     mounted(){
-        this.userId = localStorage.getItem("userId");
-
-        let date = new Date();
-        let getYear = date.getFullYear();
-        this.year = getYear;
-
-        let getMonth = date.getMonth()+1;
-        getMonth = getMonth<10 ? "0"+getMonth : getMonth;
-        this.month = getMonth;
-
-        let getDate = date.getDate();
-        getDate = getDate<10 ? "0"+getDate : getDate;
-        this.day = getDate;
+        this.accountId = this.$route.params.accountId;
 
         const url = "/api";
-        axios.get(url+`/users/${this.userId}`)
-        .then((res)=>{
-            this.balance = res.data.balance;
-        })
-        .catch((err)=>console.log(err))
+        const httpRequest = async ()=>{
+            try{
+                let res = await axios.get(url+`/deposit/${this.accountId}`);
+                let data = res.data;
+                this.userId = data.userId;
+                let createAt = data.createAt;
+                let arrayDate = createAt.split('-');
+                this.year = arrayDate[0];
+                this.month = arrayDate[1];
+                this.day = arrayDate[2];
+                this.type = data.type;
+                this.oldType = data.type;
+                this.amount = data.amount;
+                this.oldAmount = data.amount;
+                this.category = data.category;
+                this.content = data.content;
+
+                res = await axios.get(url+`/users/${this.userId}`);
+                data = res.data;
+                this.balance = data.balance;
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+        httpRequest();
     },
-    methods:{
-        submit : function(){
+    methods: {
+        update : function(){
+            console.log("업데이트 버튼")
             this.date = this.year+"-"+this.month+"-"+this.day;
-
-            console.log("폼 제출");
-            console.log(this.date);
-            console.log(this.type);
-            console.log(this.amount);
-            console.log(this.category);
-            console.log(this.content);
-
-            const url = "/api"
             const data = {
                 'userId' : this.userId,
                 'type' : this.type,
@@ -100,35 +100,33 @@ export default {
                 'category' : this.category,
                 'content' : this.content
             }
-
-            axios.post(url+'/deposit', data)
+            const url = "/api";
+            axios.put(url+`/deposit/${this.accountId}`, data)
             .then((res)=>{
-                let updateBalance = parseInt(this.balance);
+                let updateBalance = this.oldType === "입금" ? parseInt(this.balance) - parseInt(this.oldAmount) : parseInt(this.balance) + parseInt(this.oldAmount);
                 if(this.type === "입금"){
                     updateBalance += parseInt(this.amount);
                 }
                 else{
                     updateBalance -= parseInt(this.amount);
                 }
-                axios.patch(url+`/users/${this.userId}`, { 'balance' : parseInt(updateBalance)})
+                axios.patch(url+`/users/${this.userId}`, {'balance' : parseInt(updateBalance)})
                 .then((res)=>{
-                    alert("가계부 등록 성공!");
-                    this.$router.push({name : 'accountStatistics'});
+                    alert("가계부 수정 성공!");
+                    this.$router.push({name : 'Calendar'});
                 })
                 .catch((err)=>console.log(err));
             })
-            .catch((err)=>console.log(err))
         },
         cancel : function(){
-            
-            this.$router.push({name : 'accountStatistics'});
+            this.$router.back();
         }
     }
 }
 </script>
 <style scoped>
-    .registration-outer{
-        width: 800px;
+    .update-outer{
+        width : 800px;
     }
     .select{
         padding : 15px 10px;

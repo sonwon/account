@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="btn">
-                <button class="btn btn-success">수정</button>
+                <button class="btn btn-success" @click="update">수정</button>
                 <button class="btn btn-light" @click="check">확인</button>
             </div>
 
@@ -40,7 +40,8 @@ export default {
             category: "",
             content: "",
             backgroundColor: "",
-            backgroundColor2: ""
+            backgroundColor2: "",
+            accountId : ""
         }
     },
     methods: {
@@ -63,6 +64,7 @@ export default {
                         this.content = deposit.content;
                         this.backgroundColor = this.type == "입금" ? "btn btn-warning" : "btn btn-secondary";
                         this.backgroundColor2 = this.type == "출금" ? "btn btn-warning" : "btn btn-secondary";
+                        this.accountId = list[count].id;
                     }
                 }
                 catch (err) {
@@ -70,6 +72,9 @@ export default {
                 }
             }
             getDeposit();
+        },
+        update(){
+            this.$router.push({name:'accountUpdate/accountId', params:{'accountId' : this.accountId}})
         }
     },
     mounted() {

@@ -2,7 +2,7 @@
     <div class="modal">
         <div class="box">
             생성
-            {{ userId }}
+            {{ userid }}
             {{ createAt }}
         </div>
     </div>
@@ -14,7 +14,7 @@ export default {
     data() {
         return {
             createAt: "",
-            userId: "",
+            userid: "",
             transactionDetails: []
         }
     },
@@ -24,7 +24,7 @@ export default {
     },
     mounted() {
         this.createAt = this.$route.params.createAt;
-        this.userId = localStorage.getItem("userId");
+        this.userid = this.$route.params.userId;
         let url = 'http://localhost:3000/deposit';
         console.log(url);
         const getDeposit = async () => {
