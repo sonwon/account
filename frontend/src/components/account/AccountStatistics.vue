@@ -22,6 +22,15 @@
                     <Bar :dataKeys="['month', '입금']" :barStyle="{ fill: '#F7D280' }" />
                     <Bar :dataKeys="['month', '출금']" :barStyle="{ fill: '#F7A50C' }" />
                 </template>
+                <template #widgets>
+                    <Tooltip
+                        borderColor="#48CAE4"
+                        :config="{
+                        입금: { color: '#F7D280' },
+                        출금: { color: '#F7A50C' },
+                        }"
+                    />
+                </template>
             </Chart>
         </div>
         <div class="list-outer">
@@ -73,7 +82,7 @@ export default {
     components:{ Chart, Grid, Line, Bar, Marker, Tooltip },
     mounted(){
         //userID는 params 또는 부모컴포넌트로부터 받아오기
-        let userId = this.$route.params.id;
+        this.userId = localStorage.getItem('userId');
         let chartData = [
             { month : "Jan", 입금 : 0, 출금 : 0 },
             { month : "Feb", 입금 : 0, 출금 : 0 },
@@ -93,7 +102,10 @@ export default {
         const httpRequest = async()=>{
             const url = "/api"
             try{
-                let result = await axios.get(url+`/deposit?userId=${userId}`);
+                let userData = await axios.get(url+`/users/${this.userId}`);
+                this.balance = userData.data.balance;
+
+                let result = await axios.get(url+`/deposit?userId=${this.userId}`);
                 let getData = result.data;
                 getData.forEach((data)=>{
                     let month = data.createAt.split('-')[1];
@@ -129,8 +141,7 @@ export default {
     },
     data(){
         return{
-            userId : '645f',
-            //userId를 통해 값 받아오기
+            userId : '',
             balance : 0,
             data : [],
             sortedData: [],

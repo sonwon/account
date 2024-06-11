@@ -45,7 +45,7 @@ const router = createRouter({
         },
         {
             //acountStatistics화면 개발용으로 홈화면으로 놔둠
-            path : '/',
+            path : '/accountStatistics',
             name : 'accountStatistics',
             component : AccountStatistics
         },
@@ -64,12 +64,6 @@ const router = createRouter({
                     component: CalendarDayInfo
                 }
             ]
-        },
-      {
-            path : '/accountStatistics/:id',
-            name : 'accountStatistics/id',
-            component : AccountStatistics,
-            props : true
         }
     ]
 });

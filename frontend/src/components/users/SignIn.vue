@@ -33,7 +33,9 @@ export default {
         if (data.length > 0 && data[0].password === password) {
           const token = btoa(email);
           localStorage.setItem('token', token);
-          this.$router.push({ name: 'accountStatistics/id', params:{id : data[0].id }});
+          localStorage.setItem('userId', data[0].id);
+          localStorage.setItem('userName', data[0].name)
+          this.$router.push({ name: 'accountStatistics' });
         } else {
           console.log('Invalid login credentials');
         }
