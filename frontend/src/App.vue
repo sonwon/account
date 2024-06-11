@@ -1,4 +1,18 @@
 <template>
+<<<<<<< HEAD
+  <div id="app">
+    <router-view />
+  </div>
+</template>
+
+
+<script>
+export default {
+  name: 'App',
+}
+</script>
+<style>
+=======
   <div class="flex">
     <Sidebar></Sidebar>
     <router-view></router-view>
@@ -20,4 +34,5 @@ export default {
     /* float:left */
     display: flex;
   }
+>>>>>>> dev
 </style>

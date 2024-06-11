@@ -1,6 +1,8 @@
+
 import { createWebHashHistory, createRouter } from "vue-router";
-import Login from '@/components/users/Login.vue'
-import MyPage from "@/components/users/MyPage.vue";
+import SignUp from '@/components/users/SignUp.vue';
+import SignIn from '@/components/users/SignIn.vue';
+import MyPage from '@/components/users/MyPage.vue';
 import Register from "@/components/users/Register.vue";
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
@@ -10,16 +12,24 @@ const router = createRouter({
     history : createWebHashHistory(),
     routes:[
         {
-            //login이 기본 페이지
-            path : '/login',
-            name : 'login',
-            component : Login
-        },
-        {
-            path : '/myPage',
-            name : 'myPage',
-            component : MyPage
-        },
+            path: '/',
+            redirect: '/sign-in'
+          },
+          {
+            path: '/sign-in',
+            name: 'SignIn',
+            component: SignIn,
+          },
+          {
+            path: '/my-page',
+            name: 'MyPage',
+            component: MyPage,
+          },
+          {
+            path: '/sign-up',
+            name: 'SignUp',
+            component: SignUp,
+          },
         {
             path : '/register',
             name : 'register',
@@ -44,5 +54,9 @@ const router = createRouter({
     ]
 });
 
-export default router;
-
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+  });
+  
+  export default router;
