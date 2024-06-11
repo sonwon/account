@@ -5,6 +5,10 @@ import Register from "@/components/users/Register.vue";
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
 import AccountStatistics from "@/components/account/AccountStatistics.vue";
+import Calendar from "@/components/calendar/Calendar.vue";
+import CalendarInfo from "@/components/calendar/CalendarInfo.vue";
+import CalendarDayInfo from "@/components/calendar/CalendarDayInfo.vue";
+
 
 const router = createRouter({
     history : createWebHashHistory(),
@@ -40,6 +44,22 @@ const router = createRouter({
             path : '/',
             name : 'accountStatistics',
             component : AccountStatistics
+        },
+        {
+            path: '/Calendar',
+            name: 'Calendar',
+            component: Calendar,
+            children: [
+                {
+                    path: '/:id',
+                    name: 'Calendar/id',
+                    component: CalendarInfo
+                },{
+                    path: '/:userId/:createAt',
+                    name: 'Calendar/day',
+                    component: CalendarDayInfo
+                }
+            ]
         }
     ]
 });
