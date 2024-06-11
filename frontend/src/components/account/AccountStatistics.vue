@@ -3,8 +3,13 @@
         <div class="chart-outer">
             <h3>월별 지출 차트</h3>
             <div class="chart-header">
-                입금 : <div class="chart-deposit"></div>
-                출금 : <div class="chart-withdraw"></div>
+                <div>
+                    현재 금액 : <b>{{ this.balance }}</b>
+                </div>
+                <div>
+                    입금 : <div class="chart-deposit"></div>
+                    출금 : <div class="chart-withdraw"></div>
+                </div>
             </div>
             <Chart
                 :size="{ width:800, height:420 }"
@@ -14,17 +19,8 @@
                 :axis="axis">
                 <template #layers>
                     <Grid strokeDasharray="2,2"></Grid>
-                    <Bar :dataKeys="['month', 'deposit']" :barStyle="{ fill: '#F7D280' }" />
-                    <Bar :dataKeys="['month', 'withdraw']" :barStyle="{ fill: '#F7A50C' }" />
-                </template>
-                <template #widgets>
-                    <Tooltip
-                        borderColor="#48CAE4"
-                        :config="{
-                            deposit: { color: '#90e0ef' },
-                            withdraw: { color: '#0096c7' },
-                        }"
-                    />
+                    <Bar :dataKeys="['month', '입금']" :barStyle="{ fill: '#F7D280' }" />
+                    <Bar :dataKeys="['month', '출금']" :barStyle="{ fill: '#F7A50C' }" />
                 </template>
             </Chart>
         </div>
@@ -79,18 +75,18 @@ export default {
         //userID는 params 또는 부모컴포넌트로부터 받아오기
         let userId = this.userId;
         let chartData = [
-            { month : "Jan", deposit : 0, withdraw : 0 },
-            { month : "Feb", deposit : 0, withdraw : 0 },
-            { month : "Apr", deposit : 0, withdraw : 0 },
-            { month : "Mar", deposit : 0, withdraw : 0 },
-            { month : "May", deposit : 0, withdraw : 0 },
-            { month : "Jun", deposit : 0, withdraw : 0 },
-            { month : "Jul", deposit : 0, withdraw : 0 },
-            { month : "Aug", deposit : 0, withdraw : 0 },
-            { month : "Sep", deposit : 0, withdraw : 0 },
-            { month : "Oct", deposit : 0, withdraw : 0 },
-            { month : "Nov", deposit : 0, withdraw : 0 },
-            { month : "Dec", deposit : 0, withdraw : 0 },
+            { month : "Jan", 입금 : 0, 출금 : 0 },
+            { month : "Feb", 입금 : 0, 출금 : 0 },
+            { month : "Apr", 입금 : 0, 출금 : 0 },
+            { month : "Mar", 입금 : 0, 출금 : 0 },
+            { month : "May", 입금 : 0, 출금 : 0 },
+            { month : "Jun", 입금 : 0, 출금 : 0 },
+            { month : "Jul", 입금 : 0, 출금 : 0 },
+            { month : "Aug", 입금 : 0, 출금 : 0 },
+            { month : "Sep", 입금 : 0, 출금 : 0 },
+            { month : "Oct", 입금 : 0, 출금 : 0 },
+            { month : "Nov", 입금 : 0, 출금 : 0 },
+            { month : "Dec", 입금 : 0, 출금 : 0 },
         ];
 
         //서버로부터 데이터 받아오기
@@ -106,10 +102,10 @@ export default {
                     month = month.charAt(0) === '0' ? month.charAt(1) : month;
                     let month_number = parseInt(month);
                     if(data.type === '입금'){
-                        chartData[month_number-1].deposit += parseInt(data.amount);
+                        chartData[month_number-1].입금 += parseInt(data.amount);
                     }
                     else{
-                        chartData[month_number-1].withdraw += parseInt(data.amount);
+                        chartData[month_number-1].출금 += parseInt(data.amount);
                     }
                 })
 
@@ -122,9 +118,9 @@ export default {
                     return dateB.getTime() - dateA.getTime();
                 })
 
-                sortedData.slice(0, 5);
+                this.sortedData = sortedData.slice(0, 5);
 
-                this.sortedData = sortedData;
+
             }
             catch(err){
                 console.log(err);
@@ -136,6 +132,8 @@ export default {
     data(){
         return{
             userId : 1,
+            //userId를 통해 값 받아오기
+            balance : 0,
             data : [],
             sortedData: [],
             direction : 'horizontal',
@@ -166,7 +164,8 @@ export default {
         padding: 150px;
     }
     .chart-header{
-        text-align: right;
+        display : flex;
+        justify-content: space-between;
     }
     .chart-deposit{
         display: inline-block;
