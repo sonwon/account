@@ -1,13 +1,163 @@
-<template lang="">
-    <div>
-        <h1> 쉣!</h1>
+<template>
+    <div class="signUp-outer">
+      <form class="container-lg" @submit.prevent="onSubmitPrevent">
+        <InputFormItem
+          label="이메일 (아이디)"
+          placeholder="example@kb.kr"
+          type="text"
+          v-model="email"
+          :isWrong="isWarning.email"
+          wrongMessage="잘못된 이메일 형식입니다."
+        />
+        <InputFormItem
+          label="이름"
+          placeholder="KB 국민은행 취업시켜줘라"
+          type="text"
+          v-model="username"
+        />
+        <InputFormItem
+          label="비밀번호"
+          placeholder="********"
+          type="password"
+          v-model="password"
+          :isWrong="isWarning.password"
+          wrongMessage="비밀번호는 8자 이상이어야 합니다."
+          :maxLength="20"
+          :minLength="8"
+        />
+        <InputFormItem
+          label="비밀번호 확인"
+          placeholder="********"
+          type="password"
+          v-model="passwordConfirm"
+          :isWrong="isWarning.passwordConfirm"
+          wrongMessage="비밀번호가 일치하지 않습니다."
+          :maxLength="20"
+          :minLength="8"
+        />
+        <div class="w-100 mt-3">
+          <button class="w-100 btn btn-warning" type="submit">
+            회원정보 수정
+          </button>
+        </div>
+      </form>
     </div>
-</template>
-<script>
-export default {
+  </template>
     
-}
-</script>
-<style lang="">
+    <script>
+    import { ref } from 'vue';
+    import InputFormItem from '../common/InputFormItem.vue';
+    import { isEmail, isPassword } from '../../functions/validator.js';
+    import axios from 'axios';
+  
+    export default {
+      name: 'SignUpForm',
+      components: {
+        InputFormItem,
+      },
+      props: {
+        onSubmit: {
+          type: Function,
+          required: true,
+        },
+        data: {
+        type: Object,
+        required: true,
+        default: () => ({
+          email: '',
+          username: '',
+          generation: '',
+          password: '',
+          passwordConfirm: '',
+        }),
+      },
+        setForm: {
+          type: Function,
+          required: true,
+        },
+      },
+      setup(props) {
+        const email = ref(props.data.email);
+        const username = ref(props.data.username);
+        const generation = ref(props.data.generation);
+        const password = ref(props.data.password);
+        const passwordConfirm = ref(props.data.passwordConfirm);
     
-</style>
+        const isWarning = ref({
+          email: false,
+          password: false,
+          passwordConfirm: false,
+        });
+    
+        const resetWarning = {
+          email: false,
+          password: false,
+          passwordConfirm: false,
+        };
+    
+        const onSubmitPrevent = async () => {
+        if (!isEmail(email.value)) {
+          isWarning.value = { ...resetWarning, email: true };
+          return;
+        }
+  
+        if (!isPassword(password.value)) {
+          isWarning.value = { ...resetWarning, password: true };
+          return;
+        }
+  
+        if (password.value !== passwordConfirm.value) {
+          isWarning.value = { ...resetWarning, passwordConfirm: true };
+          return;
+        }
+  
+        try {
+            let userId = '';
+            const before_email = localStorage.getItem('token');
+            const current_email = atob(before_email);
+            await axios.get(`http://localhost:3000/users?email=${current_email}`)
+                .then((response) => {
+                    // id를 찾아서 userId에 저장
+                    console.log(response.data[0].id);
+                userId = response.data[0].id
+                })
+                .catch((error) => {
+                    console.error('Error fetching user:', error);
+                });
+
+            const response = await axios.patch(`http://localhost:3000/users/${userId}`, {
+                email: email.value,
+                name: username.value,
+                password: password.value,
+          });
+          console.log('User created:', response.data);
+          // Redirect or handle successful sign-up here
+
+          const token = btoa(current_email);
+          localStorage.setItem('token', token);
+
+          alert('회원정보 수정이 완료되었습니다.');
+        } catch (error) {
+          console.error('Error creating user:', error);
+          // Handle error (e.g., show an error message)
+        }
+      };
+        return {
+          email,
+          username,
+          password,
+          passwordConfirm,
+          isWarning,
+          onSubmitPrevent,
+        };
+      },
+    };
+    </script>
+    
+    <style scoped>
+    /* Add any specific styles if necessary */
+    .signUp-outer{
+      width : 800px;
+    }
+    </style>
+    

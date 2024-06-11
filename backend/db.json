@@ -1,16 +1,17 @@
 {
   "users": [
     {
+      "userId": 1,
       "name": "홍길동",
       "email": "admin@gmail.com",
-      "password": "dltjgus119@@",
+      "password": "1234",
       "balance": 12000,
       "id": "645f"
     }
   ],
   "deposit": [
     {
-      "userId": "645f",
+      "userId": 1,
       "type": "입금",
       "amount": 10000,
       "createAt": "2024-06-10",
@@ -19,7 +20,7 @@
       "id": "b03d"
     },
     {
-      "userId": "645f",
+      "userId": 1,
       "type": "출금",
       "amount": 2000,
       "createAt": "2024-06-11",
@@ -28,7 +29,7 @@
       "id": "cf39"
     },
     {
-      "userId": "645f",
+      "userId": 1,
       "type": "출금",
       "amount": 1000,
       "createAt": "2024-06-12",
@@ -38,30 +39,12 @@
     },
     {
       "id": "7d4a",
-      "userId": "645f",
+      "userId": 1,
       "type": "입금",
       "amount": "5000",
       "createAt": "2024-06-11",
       "category": "생활금",
       "content": "생활금 입금"
-    },
-    {
-      "id": "be46",
-      "userId": "645f",
-      "type": "입금",
-      "amount": "2000",
-      "createAt": "2024-06-11",
-      "category": "",
-      "content": ""
-    },
-    {
-      "id": "414f",
-      "userId": "645f",
-      "type": "출금",
-      "amount": "3000",
-      "createAt": "2024-06-11",
-      "category": "",
-      "content": ""
     }
   ]
 }
