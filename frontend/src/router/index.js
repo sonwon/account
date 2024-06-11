@@ -6,6 +6,10 @@ import MyPage from '@/components/users/MyPage.vue';
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
 import AccountStatistics from "@/components/account/AccountStatistics.vue";
+import Calendar from "@/components/calendar/Calendar.vue";
+import CalendarInfo from "@/components/calendar/CalendarInfo.vue";
+import CalendarDayInfo from "@/components/calendar/CalendarDayInfo.vue";
+
 
 const router = createRouter({
     history : createWebHashHistory(),
@@ -40,10 +44,26 @@ const router = createRouter({
             component : AccountRegistration
         },
         {
+            //acountStatistics화면 개발용으로 홈화면으로 놔둠
             path : '/accountStatistics',
             name : 'accountStatistics',
-            component : AccountStatistics,
-            props : true
+            component : AccountStatistics
+        },
+        {
+            path: '/Calendar',
+            name: 'Calendar',
+            component: Calendar,
+            children: [
+                {
+                    path: '/:id',
+                    name: 'Calendar/id',
+                    component: CalendarInfo
+                },{
+                    path: '/:userId/:createAt',
+                    name: 'Calendar/day',
+                    component: CalendarDayInfo
+                }
+            ]
         }
     ]
 });
