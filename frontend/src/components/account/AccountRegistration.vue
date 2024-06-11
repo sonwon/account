@@ -4,17 +4,20 @@
         <form @submit.prevent="submit">
             <div class="mb-5 mt-3">
                 <label class="form-label">날짜 : &ensp;</label>
-                <input class="year-input" type="text" v-model="year">&ensp;-&ensp;
-                <input class="month-input" type="text" v-model="month">&ensp;-&ensp;
-                <input class="day-input" type="text" v-model="day">
+                <input class="year-input" type="text" v-model="year" maxlength="4" pattern="[0-9]+" required>&ensp;-&ensp;
+                <input class="month-input" type="text" v-model="month" maxlength="2" pattern="[0-9]+" required>&ensp;-&ensp;
+                <input class="day-input" type="text" v-model="day" maxlength="2" pattern="[0-9]+" required>
             </div>
             <div class="mb-5 mt-3 select">
                 <input type="radio" v-model="type" name="type" id="deposit" value="입금" checked><label for="deposit">입금</label>
                 <input type="radio" v-model="type" name="type" id="withdraw" value="출금"><label for="withdraw">출금</label>
             </div>
             <div class="mb-5 mt-3">
+                현재 금액 : <b>{{this.balance}}</b>
+            </div>
+            <div class="mb-5 mt-3">
                 <label class="form-label">금액 :</label>
-                <input class="form-control" type="text" v-model="amount">
+                <input class="form-control" type="text" v-model="amount" required>
             </div>
             <div class="mb-5 mt-3">
                 <label class="form-label">카테고리 :</label>
@@ -40,7 +43,7 @@ export default {
     name : 'AccountRegistration',
     data(){
         return{
-            userId : 1,
+            userId : '645f',
             date : "",
             year : "",
             month : "",
@@ -51,7 +54,8 @@ export default {
                 "생활금", "공과금", "월급"
             ],
             category : "",
-            content : ""
+            content : "",
+            balance : 0
         }
     },
     mounted(){
@@ -66,19 +70,24 @@ export default {
         let getDate = date.getDate();
         getDate = getDate<10 ? "0"+getDate : getDate;
         this.day = getDate;
+
+        const url = "/api/users/"+this.userId
+        axios.get(url)
+        .then((res)=>{
+            let data = res.data;
+            console.log(data);
+            this.balance = data.balance;
+            console.log(this.balance);
+        })
+        .catch((err)=>console.log(err))
     },
     methods:{
         submit : async function(){
-            this.date = this.year+"-"+this.month+"-"+this.day;
-
-            console.log("폼 제출");
-            console.log(this.date);
-            console.log(this.type);
-            console.log(this.amount);
-            console.log(this.category);
-            console.log(this.content);
-
-            const url = "/api/deposit"
+            let getMonth = this.month.length<2 ? "0"+this.month : this.month;
+            let getDate = this.day.length<2 ? "0"+this.day : this.day;
+            this.date = this.year+"-"+getMonth+"-"+getDate;
+            
+            const url = "/api"
             const data = {
                 'userId' : this.userId,
                 'type' : this.type,
@@ -88,10 +97,30 @@ export default {
                 'content' : this.content
             }
 
-            await axios.post(url, data)
+            await axios.post(url+"/deposit", data)
             .then((res)=>{
-                alert("가계부 등록 성공!");
-                this.$router.push({name : 'accountStatistics'});
+                //user의 balance 반영
+                if(this.type == "입금"){
+                    //balance 증가
+                    let updateBalance = parseInt(this.balance) + parseInt(this.amount);
+                    axios.patch(url+`/users/${this.userId}`, { 'balance' : updateBalance })
+                    .then((res)=>{
+                        console.log(res.data);
+                        alert("가계부 등록 성공!");
+                        this.$router.push({name : 'accountStatistics'});
+                    })
+                    .catch((err)=>console.log(err));
+                }
+                else{
+                    //balance 감소
+                    let updateBalance = parseInt(this.balance) - parseInt(this.amount)
+                    axios.patch(url+`/users/${this.userId}`, { 'balance' : updateBalance })
+                    .then((res)=>{
+                        alert("가계부 등록 성공!");
+                        this.$router.push({name : 'accountStatistics'});
+                    })
+                    .catch((err)=>console.log(err));
+                }
             })
             .catch((err)=>console.log(err))
         },

@@ -11,7 +11,7 @@
   ],
   "deposit": [
     {
-      "userId": 1,
+      "userId": "645f",
       "type": "입금",
       "amount": 10000,
       "createAt": "2024-06-10",
@@ -20,7 +20,7 @@
       "id": "b03d"
     },
     {
-      "userId": 1,
+      "userId": "645f",
       "type": "출금",
       "amount": 2000,
       "createAt": "2024-06-11",
@@ -29,7 +29,7 @@
       "id": "cf39"
     },
     {
-      "userId": 1,
+      "userId": "645f",
       "type": "출금",
       "amount": 1000,
       "createAt": "2024-06-12",
@@ -39,12 +39,30 @@
     },
     {
       "id": "7d4a",
-      "userId": 1,
+      "userId": "645f",
       "type": "입금",
       "amount": "5000",
       "createAt": "2024-06-11",
       "category": "생활금",
       "content": "생활금 입금"
+    },
+    {
+      "id": "be46",
+      "userId": "645f",
+      "type": "입금",
+      "amount": "2000",
+      "createAt": "2024-06-11",
+      "category": "",
+      "content": ""
+    },
+    {
+      "id": "414f",
+      "userId": "645f",
+      "type": "출금",
+      "amount": "3000",
+      "createAt": "2024-06-11",
+      "category": "",
+      "content": ""
     }
   ]
 }
