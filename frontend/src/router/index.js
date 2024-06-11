@@ -1,7 +1,8 @@
+
 import { createWebHashHistory, createRouter } from "vue-router";
-import Login from '@/components/users/Login.vue'
-import MyPage from "@/components/users/MyPage.vue";
-import Register from "@/components/users/Register.vue";
+import SignUp from '@/components/users/SignUp.vue';
+import SignIn from '@/components/users/SignIn.vue';
+import MyPage from '@/components/users/MyPage.vue';
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
 import AccountStatistics from "@/components/account/AccountStatistics.vue";
@@ -14,21 +15,24 @@ const router = createRouter({
     history : createWebHashHistory(),
     routes:[
         {
-            //login이 기본 페이지
-            path : '/login',
-            name : 'login',
-            component : Login
-        },
-        {
-            path : '/myPage',
-            name : 'myPage',
-            component : MyPage
-        },
-        {
-            path : '/register',
-            name : 'register',
-            component : Register
-        },
+            path: '/',
+            redirect: '/sign-in'
+          },
+          {
+            path: '/sign-in',
+            name: 'SignIn',
+            component: SignIn,
+          },
+          {
+            path: '/my-page',
+            name: 'MyPage',
+            component: MyPage,
+          },
+          {
+            path: '/sign-up',
+            name: 'SignUp',
+            component: SignUp,
+          },
         {
             path : '/accountRecord',
             name : 'accountRecord',
@@ -60,9 +64,14 @@ const router = createRouter({
                     component: CalendarDayInfo
                 }
             ]
+        },
+      {
+            path : '/accountStatistics/:id',
+            name : 'accountStatistics/id',
+            component : AccountStatistics,
+            props : true
         }
     ]
 });
 
 export default router;
-
