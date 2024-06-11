@@ -1,18 +1,11 @@
 <template>
   <div id="app">
-    <router-view />
-  </div>
-</template>
-
-
-<script>
-export default {
-  name: 'App',
-}
-</script>
-  <div class="flex">
-    <Sidebar></Sidebar>
-    <router-view></router-view>
+    <div class="flex">
+      <Sidebar></Sidebar>
+      <div class="view-outer">
+      <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,5 +23,8 @@ export default {
   .flex{
     /* float:left */
     display: flex;
+  }
+  .view-outer{
+    padding: 150px;
   }
 </style>

@@ -73,7 +73,7 @@ export default {
     components:{ Chart, Grid, Line, Bar, Marker, Tooltip },
     mounted(){
         //userID는 params 또는 부모컴포넌트로부터 받아오기
-        let userId = this.userId;
+        let userId = this.$route.params.id;
         let chartData = [
             { month : "Jan", 입금 : 0, 출금 : 0 },
             { month : "Feb", 입금 : 0, 출금 : 0 },
@@ -93,11 +93,9 @@ export default {
         const httpRequest = async()=>{
             const url = "/api"
             try{
-                let result = await axios.get(url+"/deposit");
+                let result = await axios.get(url+`/deposit?userId=${userId}`);
                 let getData = result.data;
-                
-                let myData = getData.filter((data)=>{ return data.userId === userId });
-                myData.forEach((data)=>{
+                getData.forEach((data)=>{
                     let month = data.createAt.split('-')[1];
                     month = month.charAt(0) === '0' ? month.charAt(1) : month;
                     let month_number = parseInt(month);
@@ -111,7 +109,7 @@ export default {
 
                 this.data = chartData;
 
-                let sortedData = myData.sort(function(a, b){
+                let sortedData = getData.sort(function(a, b){
                     let dateA = new Date(a.createAt);
                     let dateB = new Date(b.createAt);
 
@@ -131,7 +129,7 @@ export default {
     },
     data(){
         return{
-            userId : 1,
+            userId : '645f',
             //userId를 통해 값 받아오기
             balance : 0,
             data : [],
@@ -160,8 +158,6 @@ export default {
 <style scoped>
     #accountStatistics{
         text-align: center;
-        position: relative;
-        padding: 150px;
     }
     .chart-header{
         display : flex;

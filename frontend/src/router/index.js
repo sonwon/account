@@ -3,7 +3,6 @@ import { createWebHashHistory, createRouter } from "vue-router";
 import SignUp from '@/components/users/SignUp.vue';
 import SignIn from '@/components/users/SignIn.vue';
 import MyPage from '@/components/users/MyPage.vue';
-import Register from "@/components/users/Register.vue";
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
 import AccountStatistics from "@/components/account/AccountStatistics.vue";
@@ -31,11 +30,6 @@ const router = createRouter({
             component: SignUp,
           },
         {
-            path : '/register',
-            name : 'register',
-            component : Register
-        },
-        {
             path : '/accountRecord',
             name : 'accountRecord',
             component : AccountRecord
@@ -46,17 +40,12 @@ const router = createRouter({
             component : AccountRegistration
         },
         {
-            //acountStatistics화면 개발용으로 홈화면으로 놔둠
-            path : '/',
-            name : 'accountStatistics',
-            component : AccountStatistics
+            path : '/accountStatistics/:id',
+            name : 'accountStatistics/id',
+            component : AccountStatistics,
+            props : true
         }
     ]
 });
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
-  });
-  
-  export default router;
+export default router;

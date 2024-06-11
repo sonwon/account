@@ -19,7 +19,7 @@
         :minLength="8"
       />
       <div class="w-full mt-8">
-        <button class="btn btn-primary w-100" type="submit">
+        <button class="btn btn-warning w-100" type="submit">
           로그인
         </button>
       </div>
