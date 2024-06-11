@@ -13,16 +13,16 @@
     {
       "userId": "645f",
       "type": "입금",
-      "amount": 10000,
+      "amount": 12000,
       "createAt": "2024-06-10",
-      "category": "용돈",
+      "category": "생활금",
       "content": "용돈 입금",
       "id": "b03d"
     },
     {
       "userId": "645f",
       "type": "출금",
-      "amount": 2000,
+      "amount": 3000,
       "createAt": "2024-06-11",
       "category": "생활금",
       "content": "편의점 출금",
@@ -31,7 +31,7 @@
     {
       "userId": "645f",
       "type": "출금",
-      "amount": 1000,
+      "amount": 2000,
       "createAt": "2024-06-12",
       "category": "생활금",
       "content": "편의점 출금",
@@ -41,7 +41,7 @@
       "id": "7d4a",
       "userId": "645f",
       "type": "입금",
-      "amount": "5000",
+      "amount": 5000,
       "createAt": "2024-06-11",
       "category": "생활금",
       "content": "생활금 입금"

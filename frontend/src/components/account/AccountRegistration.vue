@@ -95,7 +95,7 @@ export default {
             const data = {
                 'userId' : this.userId,
                 'type' : this.type,
-                'amount' : this.amount,
+                'amount' : parseInt(this.amount),
                 'createAt' : this.date,
                 'category' : this.category,
                 'content' : this.content
@@ -103,14 +103,14 @@ export default {
 
             axios.post(url+'/deposit', data)
             .then((res)=>{
-                let updateBalance = this.balance;
+                let updateBalance = parseInt(this.balance);
                 if(this.type === "입금"){
-                    updateBalance += this.amount;
+                    updateBalance += parseInt(this.amount);
                 }
                 else{
-                    updateBalance -= this.amount;
+                    updateBalance -= parseInt(this.amount);
                 }
-                axios.patch(url+`/users/${this.userId}`, { 'balance' : updateBalance})
+                axios.patch(url+`/users/${this.userId}`, { 'balance' : parseInt(updateBalance)})
                 .then((res)=>{
                     alert("가계부 등록 성공!");
                     this.$router.push({name : 'accountStatistics'});
