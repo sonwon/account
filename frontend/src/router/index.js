@@ -6,6 +6,7 @@ import MyPage from '@/components/users/MyPage.vue';
 import AccountRecord from "@/components/account/AccountRecord.vue";
 import AccountRegistration from "@/components/account/AccountRegistration.vue";
 import AccountStatistics from "@/components/account/AccountStatistics.vue";
+import AccountUpdate from "@/components/account/AccountUpdate.vue";
 import Calendar from "@/components/calendar/Calendar.vue";
 import CalendarInfo from "@/components/calendar/CalendarInfo.vue";
 import CalendarDayInfo from "@/components/calendar/CalendarDayInfo.vue";
@@ -48,6 +49,11 @@ const router = createRouter({
             path : '/accountStatistics',
             name : 'accountStatistics',
             component : AccountStatistics
+        },
+        {
+          path : '/accountUpdate/:accountId',
+          name : 'accountUpdate/accountId',
+          component : AccountUpdate
         },
         {
             path: '/Calendar',
