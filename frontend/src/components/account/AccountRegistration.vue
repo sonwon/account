@@ -8,6 +8,9 @@
                 <input class="month-input" type="text" v-model="month">&ensp;-&ensp;
                 <input class="day-input" type="text" v-model="day">
             </div>
+            <div class="mb-5 mt-3">
+                현재 금액 : <b>{{ this.balance }}</b>
+            </div>
             <div class="mb-5 mt-3 select">
                 <input type="radio" v-model="type" name="type" id="deposit" value="입금" checked><label for="deposit">입금</label>
                 <input type="radio" v-model="type" name="type" id="withdraw" value="출금"><label for="withdraw">출금</label>
@@ -40,7 +43,7 @@ export default {
     name : 'AccountRegistration',
     data(){
         return{
-            userId : 1,
+            userId : "",
             date : "",
             year : "",
             month : "",
@@ -51,10 +54,13 @@ export default {
                 "생활금", "공과금", "월급"
             ],
             category : "",
-            content : ""
+            content : "",
+            balance : 0
         }
     },
     mounted(){
+        this.userId = localStorage.getItem("userId");
+
         let date = new Date();
         let getYear = date.getFullYear();
         this.year = getYear;
@@ -66,9 +72,16 @@ export default {
         let getDate = date.getDate();
         getDate = getDate<10 ? "0"+getDate : getDate;
         this.day = getDate;
+
+        const url = "/api";
+        axios.get(url+`/users/${this.userId}`)
+        .then((res)=>{
+            this.balance = res.data.balance;
+        })
+        .catch((err)=>console.log(err))
     },
     methods:{
-        submit : async function(){
+        submit : function(){
             this.date = this.year+"-"+this.month+"-"+this.day;
 
             console.log("폼 제출");
@@ -78,7 +91,7 @@ export default {
             console.log(this.category);
             console.log(this.content);
 
-            const url = "/api/deposit"
+            const url = "/api"
             const data = {
                 'userId' : this.userId,
                 'type' : this.type,
@@ -88,10 +101,21 @@ export default {
                 'content' : this.content
             }
 
-            await axios.post(url, data)
+            axios.post(url+'/deposit', data)
             .then((res)=>{
-                alert("가계부 등록 성공!");
-                this.$router.push({name : 'accountStatistics'});
+                let updateBalance = this.balance;
+                if(this.type === "입금"){
+                    updateBalance += this.amount;
+                }
+                else{
+                    updateBalance -= this.amount;
+                }
+                axios.patch(url+`/users/${this.userId}`, { 'balance' : updateBalance})
+                .then((res)=>{
+                    alert("가계부 등록 성공!");
+                    this.$router.push({name : 'accountStatistics'});
+                })
+                .catch((err)=>console.log(err));
             })
             .catch((err)=>console.log(err))
         },

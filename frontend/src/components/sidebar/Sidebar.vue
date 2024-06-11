@@ -8,7 +8,7 @@
             <ul class="menu">
                 <li v-for="(item, index) in menuItems" :key="index" :class="{ active: selectedItem === item.name }"
                     @click="selectItem(item)" style="line-height: 200%;" >                    
-                     {{item.name}}
+                        {{item.name}}
                 </li>
             </ul>            
         </div>
@@ -20,7 +20,7 @@
 
 </template>
 <script>
-// import axios from "axios";
+
 export default {
     name: "Sidebar",
     data() {
@@ -28,20 +28,21 @@ export default {
             name: "mount에서 가져올 예정",
             menuItems: [
                 { name: "마이페이지", link: "/" },
-                { name: "월별 제정 요약", link: "/" },
-                { name: "거래 내역 조회", link: "/accountStatistics" },
+                { name: "월별 제정 요약", link: "/accountStatistics" },
+                { name: "거래 내역 조회", link: "/" },
                 { name: "입출금 등록", link: "/accountRegistration" }
             ],
-            selectedItem: null
+            selectedItem: null,
+            userId : '',
         }
     },
     mounted() {
-
+        this.userId = localStorage.getItem('userId');
+        this.name = localStorage.getItem('userName')+" 님";
     },
     methods: {
         selectItem(item) {
             this.selectedItem = item.name;
-            console.log(item)
             this.$router.push(item.link)
         }
     }

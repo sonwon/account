@@ -40,8 +40,8 @@ const router = createRouter({
             component : AccountRegistration
         },
         {
-            path : '/accountStatistics/:id',
-            name : 'accountStatistics/id',
+            path : '/accountStatistics',
+            name : 'accountStatistics',
             component : AccountStatistics,
             props : true
         }

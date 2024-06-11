@@ -4,7 +4,7 @@
       "name": "홍길동",
       "email": "admin@gmail.com",
       "password": "dltjgus119@@",
-      "balance": 12000,
+      "balance": 8000,
       "id": "645f"
     }
   ],
@@ -62,6 +62,15 @@
       "createAt": "2024-06-11",
       "category": "",
       "content": ""
+    },
+    {
+      "id": "ff43",
+      "userId": "645f",
+      "type": "출금",
+      "amount": "4000",
+      "createAt": "2024-06-11",
+      "category": "생활금",
+      "content": "과자 구매"
     }
   ]
 }
