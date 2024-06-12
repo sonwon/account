@@ -135,7 +135,6 @@
             const token = btoa(email.value);
             localStorage.setItem('token', token);
             localStorage.setItem('userName', username.value);
-            localStorage.setItem('userId', userId);
 
           alert('회원정보 수정이 완료되었습니다.');
         } catch (error) {

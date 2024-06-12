@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="btn">
-                <button class="btn btn-success">수정</button>
+                <button class="btn btn-success" @click="update">수정</button>
                 <button class="btn btn-light" @click="check">확인</button>
             </div>
 
@@ -40,10 +40,14 @@ export default {
             category: "",
             content: "",
             backgroundColor: "",
-            backgroundColor2: ""
+            backgroundColor2: "",
+            accountId : ''
         }
     },
     methods: {
+        update(){
+            this.$router.push({name:'accountUpdate/accountId', params:{'accountId' : this.accountId}})
+        },
         check() {
             this.$router.back();
         },
@@ -56,6 +60,7 @@ export default {
                     let getEvent = [];
                     for (let count in list) {
                         let deposit = list[count];
+                        this.accountId = deposit.id;
                         this.amount = deposit.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         this.createAt = deposit.createAt.split("-");
                         this.type = deposit.type;
