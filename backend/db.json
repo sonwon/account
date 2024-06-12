@@ -54,24 +54,6 @@
       "id": "4c54c"
     },
     {
-      "userId": "645f",
-      "type": "출금",
-      "amount": 2000,
-      "createAt": "2024-06-12",
-      "category": "생활금",
-      "content": "편의점 출금",
-      "id": "4c24c"
-    },
-    {
-      "userId": "645f",
-      "type": "출금",
-      "amount": 2000,
-      "createAt": "2024-06-12",
-      "category": "생활금",
-      "content": "편의점 출금",
-      "id": "4c34c"
-    },
-    {
       "userId": "61b9",
       "type": "입금",
       "amount": 3000,

@@ -12,6 +12,9 @@ export const useCalendarStore = defineStore("counter", {
 
     },
     actions: { 
+        clear(){
+            this.CalendarList.splice(0, this.CalendarList.length);
+        },
         delete(calendar) {
             this.CalendarList.splice(this.CalendarList.indexOf(calendar), 1);
         },
