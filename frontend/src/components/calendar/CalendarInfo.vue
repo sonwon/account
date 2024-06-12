@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="btn">
-                <button class="btn btn-success" @click="update">수정</button>
+                <button class="btn btn-success">수정</button>
                 <button class="btn btn-light" @click="check">확인</button>
             </div>
 
@@ -40,8 +40,7 @@ export default {
             category: "",
             content: "",
             backgroundColor: "",
-            backgroundColor2: "",
-            accountId : ""
+            backgroundColor2: ""
         }
     },
     methods: {
@@ -64,7 +63,6 @@ export default {
                         this.content = deposit.content;
                         this.backgroundColor = this.type == "입금" ? "btn btn-warning" : "btn btn-secondary";
                         this.backgroundColor2 = this.type == "출금" ? "btn btn-warning" : "btn btn-secondary";
-                        this.accountId = list[count].id;
                     }
                 }
                 catch (err) {
@@ -72,9 +70,6 @@ export default {
                 }
             }
             getDeposit();
-        },
-        update(){
-            this.$router.push({name:'accountUpdate/accountId', params:{'accountId' : this.accountId}})
         }
     },
     mounted() {
@@ -124,7 +119,6 @@ export default {
     max-width: 500px;
     min-width: 100px;
     min-height: 350px;
-    /* font: 13px "verdana"; */
     padding: 10px 10px 10px 10px;
 }
 
@@ -138,23 +132,3 @@ export default {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 </style>
-
-
-<!-- <div>
-                <button :class="backgroundColor" disabled>입금</button>
-                <button :class="backgroundColor2" disabled>출금</button>
-            </div>
-            <div class="amount">
-                <p>금액</p>
-                <p>{{ amount }}</p>
-            </div>
-            <div class="category">
-                <p>카테고리 :{{ category }}</p>
-            </div class="amount">
-            <div class="content">
-                <p>메모 :{{ content }}</p>
-            </div>
-            <div class="btn btn">
-                <button class="btn btn-info">수정</button>
-                <button class="btn btn-light" @click="check">확인</button>
-            </div> -->
