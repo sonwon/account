@@ -42,7 +42,7 @@ export default {
     },
     data() {
         return {
-            userid: "",
+            userid: "645f",
             selectedEventType: '',
             originalEvents: [],
             utilitiesClicked: false,
@@ -150,7 +150,7 @@ export default {
         }
     },
     mounted() {
-        this.userid = localStorage.getItem('userId');
+        this.store.clear();
         let url = 'http://localhost:3000/deposit?userId=' + this.userid;
         const getDeposit = async () => {
             try {
