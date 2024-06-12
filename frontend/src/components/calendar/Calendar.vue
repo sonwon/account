@@ -1,7 +1,29 @@
 <template>
-    <div>
+    <div class="view">
         <div class="FullCalendar">
+
             <FullCalendar :options="calendarOptions" />
+        </div>
+        <div class="filters">
+            <label>
+                <select style="background-color: white;" class="form-select" v-model="selectedEventType"
+                    @change="filterEvents">
+                    <option value="">모든 내역</option>
+                    <option value="입금">입금</option>
+                    <option value="출금">출금</option>
+                </select>
+            </label>
+            <label class="selectbtn">
+                <button :style="{ backgroundColor: utilitiesClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">공과금</button>
+                <button :style="{ backgroundColor: salaryClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">월급</button>
+                <button :style="{ backgroundColor: livingClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">생활금</button>
+                <button :style="{ backgroundColor: etcClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">기타</button>
+
+            </label>
         </div>
         <router-view />
     </div>
@@ -21,6 +43,13 @@ export default {
     data() {
         return {
             userid: "645f",
+            selectedEventType: '',
+            originalEvents: [],
+            utilitiesClicked: false,
+            livingClicked: false,
+            etcClicked: false,
+            salaryClicked: false,
+            ClickedList: [],
             calendarOptions: {
                 height: 700,
                 plugins: [dayGridPlugin, interactionPlugin],
@@ -32,18 +61,85 @@ export default {
                 dateClick: this.handleDateClick,
                 locale: 'ko', //언어 설정,
                 events: [],
-                dayCellClassNames: this.dayCellClassNames
+                dayCellClassNames: this.dayCellClassNames,
+                headerToolbar: { // 추가: headerToolbar 옵션
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay,today'
+                },
             }
         }
     },
     methods: {
+        catagoryClick(event) {
+            const buttonText = event.target.textContent; // 클릭된 버튼의 텍스트     
+            switch (buttonText) {
+                case '공과금':
+                    if (this.utilitiesClicked) {
+                        this.utilitiesClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.utilitiesClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }                    
+                    break;
+                case '월급':
+                    if (this.salaryClicked) {
+                        this.salaryClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.salaryClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }                    
+                    break;
+                case '생활금':
+                    if (this.livingClicked) {
+                        this.livingClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.livingClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }                    
+                    break;
+                case '기타':
+                    if (this.etcClicked) {
+                        this.etcClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.etcClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }
+                    break;
+            }
+            
+            if (this.selectedEventType) {
+                if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType).filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
+                else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            } else {             
+                if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
+                else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            }            
+
+
+        },
+        filterEvents() {
+            console.log(this.originalEvents.filter(event => event.type === this.selectedEventType));
+            if (this.selectedEventType) {
+                this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            } else {
+                this.calendarOptions.events = this.originalEvents;
+            }
+        },
         handleEventClick(clickInfo) {
             //라우터 연결 부분, 추후 라우터 가드 설정하기. id가 사용자 id가 맞는지 확인
             this.$router.push({ name: 'Calendar/id', params: { id: clickInfo.event.id } })
         },
         handleDateClick(clickInfo) {
             this.$router.push({ name: 'Calendar/day', params: { createAt: clickInfo.dateStr, userId: this.userid } })
-            // 거래 등록 추가?
         },
         dayCellClassNames(arg) {
             const date = arg.date;
@@ -59,12 +155,12 @@ export default {
             try {
                 let result = await axios.get(url, {});
                 let list = await result.data;
-                let getEvent = [];
                 for (let count in list) {
                     let deposit = list[count];
                     let color = deposit.type === "입금" ? "#307007" : "red"
                     this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
                 }
+                this.originalEvents = this.store.CalendarList;
                 this.calendarOptions.events = this.store.CalendarList;
                 console.log(this.store.CalendarList);
             }
@@ -82,27 +178,42 @@ export default {
 }
 </script>
 <style scoped>
-h3 {
-    margin: 40px 0 0;
+.fc .today {
+    background-color: #D1E7DD !important;
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
+.view {
+    display: flex
 }
 
-li {
-    display: inline-block;
-    margin: 0 10px;
+.filters {
+    padding-top: 10%;
+    /* float: top; */
+}
+
+button {
+    width: 100px;
+    height: 100px;
+}
+
+.selectbtn {
+    margin-top: 50px;
+    width: 90px;
+
+}
+
+.selectbtn button {
+    margin-bottom: 20px;
 }
 
 .FullCalendar {
-    padding-top: 20%;
-    padding-left: 15%;
-    width: 500%;
+    padding-top: 5%;
+    max-width: 1500px;
+    min-width: 1500px;
 }
 
-a {
-    color: #42b983;
+label {
+    margin-left: 20px
 }
+
 </style>
