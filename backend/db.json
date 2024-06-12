@@ -28,6 +28,7 @@
       "content": "편의점 출금",
       "id": "cf39"
     },
+    
     {
       "userId": "645f",
       "type": "출금",
@@ -35,16 +36,44 @@
       "createAt": "2024-06-12",
       "category": "생활금",
       "content": "편의점 출금",
-      "id": "4c4c"
+      "id": "4c43c"
     },
     {
-      "id": "7d4a",
       "userId": "645f",
-      "type": "입금",
-      "amount": 5000,
-      "createAt": "2024-06-11",
+      "type": "출금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
       "category": "생활금",
-      "content": "생활금 입금"
+      "content": "편의점 출금",
+      "id": "4c54c"
+    },
+    {
+      "userId": "645f",
+      "type": "출금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "편의점 출금",
+      "id": "4c24c"
+    },
+    {
+      "userId": "645f",
+      "type": "출금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "편의점 출금",
+      "id": "4c34c"
+    },
+    {
+      "userId": "645f",
+      "type": "출금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "편의점 출금",
+      "id": "4c14c"
     }
+
   ]
 }
