@@ -13,19 +13,21 @@
             </ul>            
         </div>
         <div class="footer">
-            <p>{{ name }}</p>
-            <router-link to="/" style="color:gray" @click.prevent="logout">로그아웃</router-link>
+            <p>{{ storeUserName }}</p>
+            <router-link to="/" style="color:gray;" @click.prevent="LoginLogoutMethod">{{ storeIsLogin }}</router-link>
         </div>
     </div>
 
 </template>
 <script>
+import { useUserStore } from '@/components/pinia/UserStore';
+import { mapState, mapActions } from 'pinia';
 
 export default {
     name: "Sidebar",
     data() {
         return {
-            name: "mount에서 가져올 예정",
+            name: "",
             menuItems: [
                 { name: "마이페이지", link: "/my-page" },
                 { name: "월별 제정 요약", link: "/accountStatistics" },
@@ -36,22 +38,20 @@ export default {
             userId : '',
         }
     },
-    mounted() {
-        this.userId = localStorage.getItem('userId');
-        this.name = localStorage.getItem('userName')+" 님";
+    computed : {
+        ...mapState(useUserStore, ['storeUserId', 'storeUserName', 'storeIsLogin'])
     },
     methods: {
         selectItem(item) {
-            this.selectedItem = item.name;
-            this.$router.push(item.link)
+            if(this.storeUserId !== ''){
+                this.selectedItem = item.name;
+                this.$router.push(item.link)
+            }
+            else{
+                alert('로그인이 필요한 페이지입니다');
+            }
         },
-
-        logout(){
-            localStorage.removeItem('token');
-            localStorage.removeItem('userId');
-            this.$router.push('/');
-            console.log('로그아웃');
-        }
+        ...mapActions(useUserStore, ['setStoreUserId', 'setStoreUserName', 'setStoreIsLogin', 'LoginLogoutMethod'])
     }
 }
 </script>

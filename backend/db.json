@@ -1,12 +1,18 @@
 {
   "users": [
     {
-      "userId": 1,
-      "name": "홍길동",
+      "username": "홍길동",
       "email": "admin@gmail.com",
       "password": "dltjgus119@@",
       "balance": 12000,
       "id": "645f"
+    },
+    {
+      "id": "61b9",
+      "email": "gmdals@naver.com",
+      "username": "손흥민",
+      "password": "gmdals1234@",
+      "balance": 1000
     }
   ],
   "deposit": [
@@ -28,7 +34,6 @@
       "content": "편의점 출금",
       "id": "cf39"
     },
-    
     {
       "userId": "645f",
       "type": "출금",
@@ -66,14 +71,13 @@
       "id": "4c34c"
     },
     {
-      "userId": "645f",
-      "type": "출금",
-      "amount": 2000,
+      "id": "bcd8",
+      "userId": "61b9",
+      "type": "입금",
+      "amount": 1000,
       "createAt": "2024-06-12",
       "category": "생활금",
-      "content": "편의점 출금",
-      "id": "4c14c"
+      "content": "생활금"
     }
-
   ]
 }

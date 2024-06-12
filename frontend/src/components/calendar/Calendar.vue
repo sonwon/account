@@ -20,7 +20,7 @@ export default {
     },
     data() {
         return {
-            userid: "645f",
+            userid: "",
             calendarOptions: {
                 height: 700,
                 plugins: [dayGridPlugin, interactionPlugin],
@@ -54,6 +54,7 @@ export default {
         }
     },
     mounted() {
+        this.userid = localStorage.getItem('userId');
         let url = 'http://localhost:3000/deposit?userId=' + this.userid;
         const getDeposit = async () => {
             try {

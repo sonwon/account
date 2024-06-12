@@ -49,6 +49,7 @@
   import InputFormItem from '../common/InputFormItem.vue';
   import { isEmail, isPassword } from '../../functions/validator.js';
   import axios from 'axios';
+  import { useRouter } from 'vue-router';
 
   export default {
     name: 'SignUpForm',
@@ -82,6 +83,7 @@
       const generation = ref(props.data.generation);
       const password = ref(props.data.password);
       const passwordConfirm = ref(props.data.passwordConfirm);
+      const router = useRouter();
   
       const isWarning = ref({
         email: false,
@@ -121,6 +123,8 @@
         });
         console.log('User created:', response.data);
         // Redirect or handle successful sign-up here
+        alert("가입 성공!");
+        router.push('/');
       } catch (error) {
         console.error('Error creating user:', error);
         // Handle error (e.g., show an error message)
