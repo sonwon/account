@@ -12,7 +12,7 @@
       "email": "gmdals@naver.com",
       "username": "손흥민",
       "password": "gmdals1234@",
-      "balance": 1000
+      "balance": 2000
     }
   ],
   "deposit": [
@@ -78,6 +78,24 @@
       "createAt": "2024-06-12",
       "category": "생활금",
       "content": "생활금"
+    },
+    {
+      "id": "fb75",
+      "userId": "61b9",
+      "type": "입금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
+      "category": "공과금",
+      "content": "연말 정산"
+    },
+    {
+      "id": "b5f5",
+      "userId": "61b9",
+      "type": "출금",
+      "amount": 1000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "편의점 지출"
     }
   ]
 }

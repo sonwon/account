@@ -3,9 +3,9 @@ import { defineStore } from "pinia"
 
 export const useUserStore = defineStore("user", {
     state: () => ({ 
-        storeUserId : '',
-        storeUserName : '로그인을 해주세요',
-        storeIsLogin : '로그인'
+        storeUserId : localStorage.getItem('userId') == undefined ? '' : localStorage.getItem('userId'),
+        storeUserName : localStorage.getItem('userName') == undefined ? '로그인을 해주세요' : localStorage.getItem('userName'),
+        storeIsLogin : localStorage.getItem('userId') == undefined ? '로그인' : '로그아웃'
     }),
     actions: { 
         setStoreUserId: function(userId){
