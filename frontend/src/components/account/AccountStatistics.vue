@@ -2,6 +2,7 @@
     <div id="accountStatistics">
         <div class="chart-outer">
             <h3>월별 지출 차트</h3>
+            <!--유저의 현재 가진 금액 값과 차트의 바가 무엇을 나타내는지 알려준다-->
             <div class="chart-header">
                 <div>
                     현재 금액 : <b>{{ this.balance }}</b>
@@ -11,6 +12,7 @@
                     출금 : <div class="chart-withdraw"></div>
                 </div>
             </div>
+            <!--Chart 컴포넌트를 사용하여 해당 달의 입금, 출금 값을 바로 출력-->
             <Chart
                 :size="{ width:800, height:420 }"
                 :data="data"
@@ -32,6 +34,7 @@
                     />
                 </template>
             </Chart>
+            <!--해당 월의 순이익을 테이블로 출력-->
             <table class="profit-table">
                 <tr>
                     <th style="width: 40px; min-width: 40px; max-width: 40px; font-size: 12px; font-weight: bold;">순이익</th>
@@ -40,6 +43,7 @@
             </table>
         </div>
         <div class="list-outer">
+            <!--거래내역 중 최근 5회를 테이블로 출력-->
             <h3>최근 거래 내역</h3>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -89,6 +93,7 @@ export default {
     mounted(){
         //userID는 params 또는 부모컴포넌트로부터 받아오기
         this.userId = localStorage.getItem('userId');
+        //바 그래프를 그리기 위한 데이터 초기화
         let chartData = [
             { month : "Jan", 입금 : 0, 출금 : 0, 순이익 : 0 },
             { month : "Feb", 입금 : 0, 출금 : 0, 순이익 : 0 },
@@ -108,11 +113,14 @@ export default {
         const httpRequest = async()=>{
             const url = "/api"
             try{
+                //json서버에서 해당 userId의 balance 얻어오기
                 let userData = await axios.get(url+`/users/${this.userId}`);
                 this.balance = userData.data.balance;
 
+                //json서버에서 해당 userId의 가계부내역(deposit)얻어오기
                 let result = await axios.get(url+`/deposit?userId=${this.userId}`);
                 let getData = result.data;
+                //얻어온 데이터로 chartData를 초기화하여 바 그래프에 전달하기
                 getData.forEach((data)=>{
                     let month = data.createAt.split('-')[1];
                     month = month.charAt(0) === '0' ? month.charAt(1) : month;
@@ -130,6 +138,7 @@ export default {
 
                 this.data = chartData;
 
+                //데이터를 시간순서로 정렬하여 최근 5개의 가계부 내역을 테이블에 전달하기
                 let sortedData = getData.sort(function(a, b){
                     let dateA = new Date(a.createAt);
                     let dateB = new Date(b.createAt);
@@ -174,6 +183,7 @@ export default {
         }
     },
     methods : {
+        //순이익이 +일 때 파란색 글자, -일 때 빨간색 글자로 바꿔주는 함수
         profitColor : function(profit){
             if(profit > 0){
                 return 'color : blue;'
