@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 
-
+//유저의 데이터를 관리하는 pinia
+//유저의 id, name, 로그인여부를 관리할 수 있다
 export const useUserStore = defineStore("user", {
     state: () => ({ 
         storeUserId : localStorage.getItem('userId') == undefined ? '' : localStorage.getItem('userId'),
@@ -35,4 +36,4 @@ export const useUserStore = defineStore("user", {
             }
         }
     }
-}) 
+})

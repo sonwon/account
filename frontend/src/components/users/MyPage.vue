@@ -21,9 +21,9 @@
           type="password"
           v-model="password"
           :isWrong="isWarning.password"
-          wrongMessage="비밀번호는 8자 이상 특수문자를 포함해야 합니다."
+          wrongMessage="비밀번호는 10자 이상 특수문자를 포함해야 합니다."
           :maxLength="20"
-          :minLength="8"
+          :minLength="10"
         />
         <InputFormItem
           label="비밀번호 확인"

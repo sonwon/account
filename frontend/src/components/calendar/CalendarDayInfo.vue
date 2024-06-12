@@ -34,23 +34,38 @@ export default {
         }
     },
     methods: {
-        deletedetail(detail) {
-            axios.delete(`http://localhost:3000/deposit/${detail.id}`);
+        deletedetail : async function (detail) {
+            await axios.delete(`http://localhost:3000/deposit/${detail.id}`);
             this.store.delete(detail);
 
             this.transactionDetails = this.store.getDailyDetails(this.date);
-            console.log(this.transactionDetails);
+            try{
+                let userJson = await axios.get(`/api/users/${this.userid}`);
+                let balance = parseInt(userJson.data.balance);
+                if(detail.type == '입금'){
+                    //입금 삭제 시 amount만큼 빼기
+                    balance -= parseInt(detail.amount);
+                }
+                else{
+                    //출금 삭제 시 amount만큼 더하기
+                    balance += parseInt(detail.amount);
+                }
+                await axios.patch(`/api/users/${this.userid}`, {'balance' : balance} )
+            }
+            catch(err){
+                console.log(err);
+            }
         },
         check() {
             this.$router.back();
         },
     },
     mounted() {
+        this.userid = localStorage.getItem('userId');
         this.createAt = this.$route.params.createAt;
         this.date = this.createAt;
         this.transactionDetails = this.store.getDailyDetails(this.date);
         this.createAt = this.createAt.split("-");
-        console.log(this.transactionDetails);
     },
     setup() {
         const store = useCalendarStore();

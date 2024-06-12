@@ -1,5 +1,6 @@
 <template>
     <div class="container mt-3 registration-outer">
+        <!--가계부 등록 페이지 날짜, 금액, 입/출금, 카테고리, 메모를 기입후 등록한다-->
         <h3>입출금 등록</h3>
         <form @submit.prevent="submit">
             <div class="mb-5 mt-3">
@@ -59,8 +60,10 @@ export default {
         }
     },
     mounted(){
+        //localstorage에 저장된 로그인된 userId 가져오기
         this.userId = localStorage.getItem("userId");
 
+        //현재 날짜를 받아와서 날짜 입력칸 초기화하기
         let date = new Date();
         let getYear = date.getFullYear();
         this.year = getYear;
@@ -73,6 +76,7 @@ export default {
         getDate = getDate<10 ? "0"+getDate : getDate;
         this.day = getDate;
 
+        //jsonserver에서 해당 userId의 balance(현재 금액) 가져오기
         const url = "/api";
         axios.get(url+`/users/${this.userId}`)
         .then((res)=>{
@@ -82,7 +86,10 @@ export default {
     },
     methods:{
         submit : function(){
-            this.date = this.year+"-"+this.month+"-"+this.day;
+            //v-model로 받은 값들을 json서버 deposit에 post하는 함수
+            let getMonth = this.month.length < 2 ? "0"+this.month : this.month;
+            let getDay = this.day.length < 2 ? "0"+this.day : this.day; 
+            this.date = this.year+"-"+getMonth+"-"+getDay;
 
             console.log("폼 제출");
             console.log(this.date);
@@ -103,6 +110,7 @@ export default {
 
             axios.post(url+'/deposit', data)
             .then((res)=>{
+                //post 성공시 user의 balance를 업데이트하기
                 let updateBalance = parseInt(this.balance);
                 if(this.type === "입금"){
                     updateBalance += parseInt(this.amount);
@@ -113,6 +121,7 @@ export default {
                 axios.patch(url+`/users/${this.userId}`, { 'balance' : parseInt(updateBalance)})
                 .then((res)=>{
                     alert("가계부 등록 성공!");
+                    //등록 성공후 통계화면으로 이동
                     this.$router.push({name : 'accountStatistics'});
                 })
                 .catch((err)=>console.log(err));

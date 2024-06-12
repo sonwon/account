@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="header">
-            <p style="font-weight: bold; font-size: 27px">KB IT's Your Life</p>
+            <p style="font-weight: bold; font-size: 27px; color:orange">KB IT's Your Life</p>
             <p style="font-weight: bold; font-size: 27px">가계부 프로젝트</p>
         </div>
         <div class="list">
