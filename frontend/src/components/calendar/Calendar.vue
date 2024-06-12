@@ -205,6 +205,7 @@ export default {
             this.calendarOptions.events = this.store.CalendarList;
             console.log(this.store.CalendarList);
         }
+        getDeposit();
     },
     setup() {
         const store = useCalendarStore();

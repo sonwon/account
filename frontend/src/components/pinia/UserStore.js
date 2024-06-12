@@ -21,7 +21,7 @@ export const useUserStore = defineStore("user", {
         LoginLogoutMethod: function(){
             if(this.storeIsLogin === '로그인'){
                 //로그인 이동 함수
-                this.$router.push('/accountStatistics');
+                location.replace(location.hostname);
             }
             else{
                 //로그아웃 함수
@@ -32,7 +32,7 @@ export const useUserStore = defineStore("user", {
                 this.storeUserName='로그인을 해주세요';
                 this.storeIsLogin='로그인';
                 alert("로그아웃 되었습니다");
-                this.$router.push('/');
+                location.replace(location.hostname);
             }
         }
     }

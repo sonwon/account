@@ -4,7 +4,7 @@
       "username": "홍길동",
       "email": "admin@gmail.com",
       "password": "dltjgus119@@",
-      "balance": 12000,
+      "balance": 10000,
       "id": "645f"
     }
   ],
@@ -17,15 +17,6 @@
       "category": "생활금",
       "content": "용돈 입금",
       "id": "b03d"
-    },
-    {
-      "userId": "645f",
-      "type": "출금",
-      "amount": 3000,
-      "createAt": "2024-06-11",
-      "category": "생활금",
-      "content": "편의점 출금",
-      "id": "cf39"
     },
     {
       "userId": "645f",
@@ -44,6 +35,15 @@
       "category": "생활금",
       "content": "편의점 출금",
       "id": "4c54c"
+    },
+    {
+      "id": "9612",
+      "userId": "645f",
+      "type": "입금",
+      "amount": 2000,
+      "createAt": "2024-06-12",
+      "category": "생활금",
+      "content": "생활금 입금"
     }
   ]
 }
