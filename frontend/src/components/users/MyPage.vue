@@ -49,7 +49,9 @@
     import InputFormItem from '../common/InputFormItem.vue';
     import { isEmail, isPassword } from '../../functions/validator.js';
     import axios from 'axios';
-  
+    import { useUserStore } from '../pinia/UserStore';
+
+
     export default {
       name: 'SignUpForm',
       components: {
@@ -82,7 +84,8 @@
         const generation = ref(props.data.generation);
         const password = ref(props.data.password);
         const passwordConfirm = ref(props.data.passwordConfirm);
-    
+        const store = useUserStore();
+
         const isWarning = ref({
           email: false,
           password: false,
@@ -119,7 +122,7 @@
                 .then((response) => {
                     // id를 찾아서 userId에 저장
                     console.log(response.data[0].id);
-                userId = response.data[0].id
+                    userId = response.data[0].id
                 })
                 .catch((error) => {
                     console.error('Error fetching user:', error);
@@ -135,7 +138,8 @@
 
           const token = btoa(current_email);
           localStorage.setItem('token', token);
-
+          localStorage.setItem('userName', username.value);
+          store.setStoreUserName(username.value);
           alert('회원정보 수정이 완료되었습니다.');
         } catch (error) {
           console.error('Error creating user:', error);
