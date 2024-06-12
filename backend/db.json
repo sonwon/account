@@ -4,16 +4,8 @@
       "username": "홍길동",
       "email": "admin@gmail.com",
       "password": "dltjgus119@@",
-      "balance": 12000,
+      "balance": 10000,
       "id": "645f"
-    },
-    {
-      "id": "61b9",
-      "email": "gmlcks@naver.com",
-      "username": "이강인",
-      "password": "gmlcks1234@",
-      "balance": 5000,
-      "name": "황희찬"
     }
   ],
   "deposit": [
@@ -25,15 +17,6 @@
       "category": "생활금",
       "content": "용돈 입금",
       "id": "b03d"
-    },
-    {
-      "userId": "645f",
-      "type": "출금",
-      "amount": 3000,
-      "createAt": "2024-06-11",
-      "category": "생활금",
-      "content": "편의점 출금",
-      "id": "cf39"
     },
     {
       "userId": "645f",
@@ -54,40 +37,13 @@
       "id": "4c54c"
     },
     {
-      "userId": "61b9",
+      "id": "9612",
+      "userId": "645f",
       "type": "입금",
-      "amount": 3000,
+      "amount": 2000,
       "createAt": "2024-06-12",
-      "category": "공과금",
-      "content": "연말 정산",
-      "id": "fb75"
-    },
-    {
-      "id": "b5f5",
-      "userId": "61b9",
-      "type": "출금",
-      "amount": 1000,
-      "createAt": "2024-06-12",
-      "category": "생활금",
-      "content": "편의점 지출"
-    },
-    {
-      "id": "a072",
-      "userId": "61b9",
-      "type": "입금",
-      "amount": 3000,
-      "createAt": "2024-07-13",
       "category": "생활금",
       "content": "생활금 입금"
-    },
-    {
-      "id": "5340",
-      "userId": "61b9",
-      "type": "출금",
-      "amount": 1000,
-      "createAt": "2024-07-15",
-      "category": "공과금",
-      "content": "세금"
     }
   ]
 }

@@ -54,7 +54,7 @@ export default {
     },
     data() {
         return {
-            userid: "645f",
+            userid: "",
             selectedEventType: '',
             originalEvents: [],
             utilitiesClicked: false,
@@ -180,34 +180,37 @@ export default {
             }
             return [];
         }
-    },    
-mounted() {
-    this.store.clear();
-    let url = 'http://localhost:3000/deposit?userId=' + this.userid;
-    const getDeposit = async () => {
-        try {
-            let result = await axios.get(url, {});
-            let list = await result.data;
-            for (let count in list) {
-                let deposit = list[count];
-                let color = deposit.type === "입금" ? "#307007" : "red"
-                this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
+    },
+    mounted() {
+        this.userid = localStorage.getItem('userId');
+        this.store.clear();
+        let url = 'http://localhost:3000/deposit?userId=' + this.userid;
+        const getDeposit = async () => {
+            try {
+                let result = await axios.get(url, {});
+                let list = await result.data;
+                for (let count in list) {
+                    let deposit = list[count];
+                    let color = deposit.type === "입금" ? "#307007" : "red"
+                    this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
+                }
+                this.originalEvents = this.store.CalendarList;
+                this.calendarOptions.events = this.store.CalendarList;
+                console.log(this.store.CalendarList);
+            }
+            catch (err) {
+                console.log(err);
             }
             this.originalEvents = this.store.CalendarList;
             this.calendarOptions.events = this.store.CalendarList;
             console.log(this.store.CalendarList);
         }
-        catch (err) {
-            console.log(err);
-        }
+        getDeposit();
+    },
+    setup() {
+        const store = useCalendarStore();
+        return { store }
     }
-    getDeposit();
-
-},
-setup() {
-    const store = useCalendarStore();
-    return { store }
-}
 }
 </script>
 <style scoped>
