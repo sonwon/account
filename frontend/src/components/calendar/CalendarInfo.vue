@@ -30,27 +30,49 @@
 </template>
 <script>
 import axios from "axios"
+/**
+ * CalendarInfo Vue.js component that shows detailed information for a specific transaction.
+ * @module CalendarInfo
+ * @vue-prop {string} amount - The amount of the transaction
+ * @vue-prop {string} type - The type of the transaction (e.g., 입금, 출금)
+ * @vue-prop {Array<string>} createAt- The creation date split into year, month, and day 
+ * @vue-prop {string} category - The category of the transaction
+ * @vue-prop {string} content - The content or memo of the transaction
+ * @vue-prop {string} backgroundColor - CSS class for the background color based on the transaction type
+ * @vue-prop {string} backgroundColor2 - CSS class for the alternative background color based on the transaction type
+ * @vue-prop {string} accountId - The account ID for the transaction
+ */
 export default {
     name: "CalendarInfo",
     data() {
         return {
-            amount: "",
-            createAt: [],
-            type: "",
-            category: "",
-            content: "",
-            backgroundColor: "",
-            backgroundColor2: "",
-            accountId : ''
+            
+            amount: "",            
+            createAt: [],            
+            type: "",            
+            category: "",            
+            content: "",            
+            backgroundColor: "",            
+            backgroundColor2: "",            
+            accountId: ''
         }
     },
     methods: {
+         /**
+         * Redirects to the account update page with the account ID as a parameter.
+         */
         update(){
             this.$router.push({name:'accountUpdate/accountId', params:{'accountId' : this.accountId}})
         },
+         /**
+         * Navigates back to the previous page.
+         */
         check() {
             this.$router.back();
         },
+        /**
+         * Fetches transaction details from the axios and updates the component state.
+         */
         info() {
             let url = 'http://localhost:3000/deposit?id=' + this.$route.params.id;
             const getDeposit = async () => {
@@ -78,6 +100,9 @@ export default {
         }
     },
     mounted() {
+        /**
+         * Call info Methods when mounted
+         */
         this.info();
     }
 }
