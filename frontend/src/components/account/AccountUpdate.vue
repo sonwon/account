@@ -1,16 +1,13 @@
 <template>
-    <div class="container mt-3 registration-outer">
-        <!--가계부 등록 페이지 날짜, 금액, 입/출금, 카테고리, 메모를 기입후 등록한다-->
-        <h3>입출금 등록</h3>
-        <form @submit.prevent="submit">
+    <div class="container mt-3 update-outer">
+        <!--가계부 등록과 동일한 템플릿의 가계부 수정 컴포넌트 날짜, 입금/출금, 금액, 카테고리, 메모를 변경할 수 있다-->
+        <h3>가계부 수정</h3> <br>
+        <form @submit.prevent="update">
             <div class="mb-5 mt-3">
                 <label class="form-label">날짜 : &ensp;</label>
                 <input class="year-input" type="text" v-model="year">&ensp;-&ensp;
                 <input class="month-input" type="text" v-model="month">&ensp;-&ensp;
                 <input class="day-input" type="text" v-model="day">
-            </div>
-            <div class="mb-5 mt-3">
-                현재 금액 : <b>{{ this.balance }}</b>
             </div>
             <div class="mb-5 mt-3 select">
                 <input type="radio" v-model="type" name="type" id="deposit" value="입금" checked><label for="deposit">입금</label>
@@ -31,7 +28,7 @@
                 <textarea class="form-control" rows="5" id="content" v-model="content"></textarea>
             </div>
             <div class="mt-3 btn-outer">
-                <input class="btn btn-warning btn-submit" type="submit"/>
+                <input class="btn btn-warning btn-submit" type="submit" value="수정"/>
                 <button class="btn btn-secondary btn-cancel" @click.prevent="cancel">취소</button>
             </div>
         </form>
@@ -41,16 +38,18 @@
 import axios from 'axios'
 
 export default {
-    name : 'AccountRegistration',
+    name : "AccountUpdate",
     data(){
         return{
+            accountId : "",
             userId : "",
             date : "",
-            year : "",
             month : "",
             day : "",
-            type : "입금",
+            type : "",
+            oldType : "",
             amount : 0,
+            oldAmount : 0,
             options : [
                 "생활금", "공과금", "월급"
             ],
@@ -60,45 +59,44 @@ export default {
         }
     },
     mounted(){
-        //localstorage에 저장된 로그인된 userId 가져오기
-        this.userId = localStorage.getItem("userId");
+        //해당 가계부 id를 라우트의 params로 받아온다
+        this.accountId = this.$route.params.accountId;
 
-        //현재 날짜를 받아와서 날짜 입력칸 초기화하기
-        let date = new Date();
-        let getYear = date.getFullYear();
-        this.year = getYear;
-
-        let getMonth = date.getMonth()+1;
-        getMonth = getMonth<10 ? "0"+getMonth : getMonth;
-        this.month = getMonth;
-
-        let getDate = date.getDate();
-        getDate = getDate<10 ? "0"+getDate : getDate;
-        this.day = getDate;
-
-        //jsonserver에서 해당 userId의 balance(현재 금액) 가져오기
         const url = "/api";
-        axios.get(url+`/users/${this.userId}`)
-        .then((res)=>{
-            this.balance = res.data.balance;
-        })
-        .catch((err)=>console.log(err))
+        const httpRequest = async ()=>{
+            try{
+                //받아온 가계부 id로 가계부의 값들을 가져와서 변수를 초기화한다
+                let res = await axios.get(url+`/deposit/${this.accountId}`);
+                let data = res.data;
+                this.userId = data.userId;
+                let createAt = data.createAt;
+                let arrayDate = createAt.split('-');
+                this.year = arrayDate[0];
+                this.month = arrayDate[1];
+                this.day = arrayDate[2];
+                this.type = data.type;
+                this.oldType = data.type;
+                this.amount = data.amount;
+                this.oldAmount = data.amount;
+                this.category = data.category;
+                this.content = data.content;
+
+                //유저의 balance도 변경할 수 있게 가져온다
+                res = await axios.get(url+`/users/${this.userId}`);
+                data = res.data;
+                this.balance = data.balance;
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+        httpRequest();
     },
-    methods:{
-        submit : function(){
-            //v-model로 받은 값들을 json서버 deposit에 post하는 함수
-            let getMonth = this.month.length < 2 ? "0"+this.month : this.month;
-            let getDay = this.day.length < 2 ? "0"+this.day : this.day; 
-            this.date = this.year+"-"+getMonth+"-"+getDay;
-
-            console.log("폼 제출");
-            console.log(this.date);
-            console.log(this.type);
-            console.log(this.amount);
-            console.log(this.category);
-            console.log(this.content);
-
-            const url = "/api"
+    methods: {
+        update : function(){
+            //수정 버튼을 클릭 시 변경된 값들을 json 서버에 patch하여 반영한다.
+            console.log("업데이트 버튼")
+            this.date = this.year+"-"+this.month+"-"+this.day;
             const data = {
                 'userId' : this.userId,
                 'type' : this.type,
@@ -107,37 +105,36 @@ export default {
                 'category' : this.category,
                 'content' : this.content
             }
-
-            axios.post(url+'/deposit', data)
+            const url = "/api";
+            axios.put(url+`/deposit/${this.accountId}`, data)
             .then((res)=>{
-                //post 성공시 user의 balance를 업데이트하기
-                let updateBalance = parseInt(this.balance);
+                //값이 바뀌면 유저의 balance도 변경해준다.
+                let updateBalance = this.oldType === "입금" ? parseInt(this.balance) - parseInt(this.oldAmount) : parseInt(this.balance) + parseInt(this.oldAmount);
                 if(this.type === "입금"){
                     updateBalance += parseInt(this.amount);
                 }
                 else{
                     updateBalance -= parseInt(this.amount);
                 }
-                axios.patch(url+`/users/${this.userId}`, { 'balance' : parseInt(updateBalance)})
+                axios.patch(url+`/users/${this.userId}`, {'balance' : parseInt(updateBalance)})
                 .then((res)=>{
-                    alert("가계부 등록 성공!");
-                    //등록 성공후 통계화면으로 이동
-                    this.$router.push({name : 'accountStatistics'});
+                    alert("가계부 수정 성공!");
+                    //가계부 수정 성공시 수정하기 전 컴포넌트인 Calendar로 이동한다.
+                    this.$router.push({name : 'Calendar'});
                 })
                 .catch((err)=>console.log(err));
             })
-            .catch((err)=>console.log(err))
         },
         cancel : function(){
-            
-            this.$router.push({name : 'accountStatistics'});
+            //취소하면 이전 컴포넌트로 이동
+            this.$router.back();
         }
     }
 }
 </script>
 <style scoped>
-    .registration-outer{
-        width: 800px;
+    .update-outer{
+        width : 800px;
     }
     .select{
         padding : 15px 10px;

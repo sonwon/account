@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: calendar/Calendar.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: calendar/Calendar.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+    &lt;div class="view">
+        &lt;div class="FullCalendar">
+
+            &lt;FullCalendar :options="calendarOptions" />
+        &lt;/div>
+        &lt;div class="filters">
+            &lt;label>
+                &lt;select style="background-color: white;" class="form-select" v-model="selectedEventType"
+                    @change="filterEvents">
+                    &lt;option value="">모든 내역&lt;/option>
+                    &lt;option value="입금">입금&lt;/option>
+                    &lt;option value="출금">출금&lt;/option>
+                &lt;/select>
+            &lt;/label>
+            &lt;label class="selectbtn">
+                &lt;button :style="{ backgroundColor: utilitiesClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">공과금&lt;/button>
+                &lt;button :style="{ backgroundColor: salaryClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">월급&lt;/button>
+                &lt;button :style="{ backgroundColor: livingClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">생활금&lt;/button>
+                &lt;button :style="{ backgroundColor: etcClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">기타&lt;/button>
+
+            &lt;/label>
+        &lt;/div>
+        &lt;router-view />
+    &lt;/div>
+&lt;/template>
+&lt;script>
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import axios from "axios";
+import { useCalendarStore } from '../pinia/CalendarStore';
+/**
+ * Calendar Vue.js component that integrates FullCalendar.
+ * @module Calendar
+ * @vue-prop {string} userid - The user ID.
+ * @vue-prop {string} selectedEventType - The selected event type.
+ * @vue-prop {Array} originalEvents - The original list of events.
+ * @vue-prop {boolean} utilitiesClicked - Whether the utilities button is clicked.
+ * @vue-prop {boolean} livingClicked - Whether the living button is clicked.
+ * @vue-prop {boolean} etcClicked - Whether the etc button is clicked.
+ * @vue-prop {boolean} salaryClicked - Whether the salary button is clicked.
+ * @vue-prop {Array} ClickedList - List of clicked categories.
+ * @vue-prop {Object} calendarOptions - FullCalendar options.
+ */
+export default {
+    name: "Calendar",
+    components: {
+        FullCalendar // make the &lt;FullCalendar> tag available
+    },
+    data() {
+        return {
+            userid: "645f",
+            selectedEventType: '',
+            originalEvents: [],
+            utilitiesClicked: false,
+            livingClicked: false,
+            etcClicked: false,
+            salaryClicked: false,
+            ClickedList: [],
+            calendarOptions: {
+                height: 700,
+                plugins: [dayGridPlugin, interactionPlugin],
+                initialView: 'dayGridMonth',
+                // editable: true,
+                selectable: true,
+                selectMirror: true,
+                eventClick: this.handleEventClick,
+                dateClick: this.handleDateClick,
+                locale: 'ko', //언어 설정,
+                events: [],
+                dayCellClassNames: this.dayCellClassNames,
+                headerToolbar: { // 추가: headerToolbar 옵션
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay,today'
+                },
+            }
+        }
+    },
+
+    methods: {
+        /**
+         * Handles category button clicks.
+         * @param {Event} event - The click event.
+         */
+        catagoryClick(event) {
+            const buttonText = event.target.textContent; // 클릭된 버튼의 텍스트     
+            switch (buttonText) {
+                case '공과금':
+                    if (this.utilitiesClicked) {
+                        this.utilitiesClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.utilitiesClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }
+                    break;
+                case '월급':
+                    if (this.salaryClicked) {
+                        this.salaryClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.salaryClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }
+                    break;
+                case '생활금':
+                    if (this.livingClicked) {
+                        this.livingClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.livingClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }
+                    break;
+                case '기타':
+                    if (this.etcClicked) {
+                        this.etcClicked = false;
+                        this.ClickedList.splice(this.ClickedList.indexOf(buttonText), 1);
+                    }
+                    else {
+                        this.etcClicked = true;
+                        this.ClickedList.push(buttonText);
+                    }
+                    break;
+            }
+
+            if (this.selectedEventType) {
+                if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType).filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
+                else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            } else {
+                if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
+                else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            }
+
+
+        },
+        /**
+        * Filters events based on selected event type.
+        */
+        filterEvents() {
+            console.log(this.originalEvents.filter(event => event.type === this.selectedEventType));
+            if (this.selectedEventType) {
+                this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
+            } else {
+                this.calendarOptions.events = this.originalEvents;
+            }
+        },
+        /**
+         * Handles event click.
+         * @param {Object} clickInfo - The click information.
+         */
+        handleEventClick(clickInfo) {
+            this.$router.push({ name: 'Calendar/id', params: { id: clickInfo.event.id } })
+        },
+        /**
+         * Handles date click.
+         * @param {Object} clickInfo - The click information.
+         */
+        handleDateClick(clickInfo) {
+            this.$router.push({ name: 'Calendar/day', params: { createAt: clickInfo.dateStr, userId: this.userid } })
+        },
+        /**
+         * Adds class names to day cells.
+         * @param {Object} arg - The argument object containing date information.
+         * @returns {Array} - Array of class names.
+         */
+        dayCellClassNames(arg) {
+            const date = arg.date;
+            if (date.getDay() === 0 || date.getDay() === 6) {
+                return ['weekend'];
+            }
+            return [];
+        }
+    },    
+mounted() {
+    this.store.clear();
+    let url = 'http://localhost:3000/deposit?userId=' + this.userid;
+    const getDeposit = async () => {
+        try {
+            let result = await axios.get(url, {});
+            let list = await result.data;
+            for (let count in list) {
+                let deposit = list[count];
+                let color = deposit.type === "입금" ? "#307007" : "red"
+                this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
+            }
+            this.originalEvents = this.store.CalendarList;
+            this.calendarOptions.events = this.store.CalendarList;
+            console.log(this.store.CalendarList);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+    getDeposit();
+
+},
+setup() {
+    const store = useCalendarStore();
+    return { store }
+}
+}
+&lt;/script>
+&lt;style scoped>
+.fc .today {
+    background-color: #D1E7DD !important;
+}
+
+.view {
+    display: flex
+}
+
+.filters {
+    padding-top: 10%;
+    /* float: top; */
+}
+
+button {
+    width: 100px;
+    height: 100px;
+}
+
+.selectbtn {
+    margin-top: 50px;
+    width: 90px;
+
+}
+
+.selectbtn button {
+    margin-bottom: 20px;
+}
+
+.FullCalendar {
+    padding-top: 5%;
+    max-width: 1500px;
+    min-width: 1500px;
+}
+
+label {
+    margin-left: 20px
+}
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarDayInfo.html">CalendarDayInfo</a></li><li><a href="module-CalendarInfo.html">CalendarInfo</a></li><li><a href="module-useCalendarStore.html">useCalendarStore</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jun 12 2024 15:54:11 GMT+0900 (대한민국 표준시)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
