@@ -34,7 +34,19 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import axios from "axios";
 import { useCalendarStore } from '../pinia/CalendarStore';
-
+/**
+ * Calendar Vue.js component that integrates FullCalendar.
+ * @module Calendar
+ * @vue-prop {string} userid - The user ID.
+ * @vue-prop {string} selectedEventType - The selected event type.
+ * @vue-prop {Array} originalEvents - The original list of events.
+ * @vue-prop {boolean} utilitiesClicked - Whether the utilities button is clicked.
+ * @vue-prop {boolean} livingClicked - Whether the living button is clicked.
+ * @vue-prop {boolean} etcClicked - Whether the etc button is clicked.
+ * @vue-prop {boolean} salaryClicked - Whether the salary button is clicked.
+ * @vue-prop {Array} ClickedList - List of clicked categories.
+ * @vue-prop {Object} calendarOptions - FullCalendar options.
+ */
 export default {
     name: "Calendar",
     components: {
@@ -70,7 +82,12 @@ export default {
             }
         }
     },
+
     methods: {
+        /**
+         * Handles category button clicks.
+         * @param {Event} event - The click event.
+         */
         catagoryClick(event) {
             const buttonText = event.target.textContent; // 클릭된 버튼의 텍스트     
             switch (buttonText) {
@@ -82,7 +99,7 @@ export default {
                     else {
                         this.utilitiesClicked = true;
                         this.ClickedList.push(buttonText);
-                    }                    
+                    }
                     break;
                 case '월급':
                     if (this.salaryClicked) {
@@ -92,7 +109,7 @@ export default {
                     else {
                         this.salaryClicked = true;
                         this.ClickedList.push(buttonText);
-                    }                    
+                    }
                     break;
                 case '생활금':
                     if (this.livingClicked) {
@@ -102,7 +119,7 @@ export default {
                     else {
                         this.livingClicked = true;
                         this.ClickedList.push(buttonText);
-                    }                    
+                    }
                     break;
                 case '기타':
                     if (this.etcClicked) {
@@ -115,17 +132,20 @@ export default {
                     }
                     break;
             }
-            
+
             if (this.selectedEventType) {
                 if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType).filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
                 else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
-            } else {             
+            } else {
                 if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
                 else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
-            }            
+            }
 
 
         },
+        /**
+        * Filters events based on selected event type.
+        */
         filterEvents() {
             console.log(this.originalEvents.filter(event => event.type === this.selectedEventType));
             if (this.selectedEventType) {
@@ -134,13 +154,25 @@ export default {
                 this.calendarOptions.events = this.originalEvents;
             }
         },
+        /**
+         * Handles event click.
+         * @param {Object} clickInfo - The click information.
+         */
         handleEventClick(clickInfo) {
-            //라우터 연결 부분, 추후 라우터 가드 설정하기. id가 사용자 id가 맞는지 확인
             this.$router.push({ name: 'Calendar/id', params: { id: clickInfo.event.id } })
         },
+        /**
+         * Handles date click.
+         * @param {Object} clickInfo - The click information.
+         */
         handleDateClick(clickInfo) {
             this.$router.push({ name: 'Calendar/day', params: { createAt: clickInfo.dateStr, userId: this.userid } })
         },
+        /**
+         * Adds class names to day cells.
+         * @param {Object} arg - The argument object containing date information.
+         * @returns {Array} - Array of class names.
+         */
         dayCellClassNames(arg) {
             const date = arg.date;
             if (date.getDay() === 0 || date.getDay() === 6) {
@@ -148,34 +180,34 @@ export default {
             }
             return [];
         }
-    },
-    mounted() {
-        this.store.clear();
-        let url = 'http://localhost:3000/deposit?userId=' + this.userid;
-        const getDeposit = async () => {
-            try {
-                let result = await axios.get(url, {});
-                let list = await result.data;
-                for (let count in list) {
-                    let deposit = list[count];
-                    let color = deposit.type === "입금" ? "#307007" : "red"
-                    this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
-                }
-                this.originalEvents = this.store.CalendarList;
-                this.calendarOptions.events = this.store.CalendarList;
-                console.log(this.store.CalendarList);
+    },    
+mounted() {
+    this.store.clear();
+    let url = 'http://localhost:3000/deposit?userId=' + this.userid;
+    const getDeposit = async () => {
+        try {
+            let result = await axios.get(url, {});
+            let list = await result.data;
+            for (let count in list) {
+                let deposit = list[count];
+                let color = deposit.type === "입금" ? "#307007" : "red"
+                this.store.push({ "title": deposit.category, "date": deposit.createAt, "backgroundColor": color, "id": deposit.id, "type": deposit.type, "amount": deposit.amount, "content": deposit.content })
             }
-            catch (err) {
-                console.log(err);
-            }
+            this.originalEvents = this.store.CalendarList;
+            this.calendarOptions.events = this.store.CalendarList;
+            console.log(this.store.CalendarList);
         }
-        getDeposit();
-
-    },
-    setup() {
-        const store = useCalendarStore();
-        return { store }
+        catch (err) {
+            console.log(err);
+        }
     }
+    getDeposit();
+
+},
+setup() {
+    const store = useCalendarStore();
+    return { store }
+}
 }
 </script>
 <style scoped>
@@ -216,5 +248,4 @@ button {
 label {
     margin-left: 20px
 }
-
 </style>
