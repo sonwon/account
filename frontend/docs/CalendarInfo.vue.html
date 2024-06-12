@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CalendarInfo.vue</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CalendarInfo.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+    &lt;div class="modal">
+        &lt;div class="box">
+            &lt;div align="center" class="date">
+                &lt;p class="createAt">{{ createAt[0] }}년&lt;/p>
+                &lt;p class="createAt">{{ createAt[1] }}월&lt;/p>
+                &lt;p class="createAt">{{ createAt[2] }}일&lt;/p>
+            &lt;/div>
+            &lt;div class="information">
+                &lt;div class="key">
+                    &lt;p>금액&lt;/p>
+                    &lt;p>내역&lt;/p>
+                    &lt;p>카테고리&lt;/p>
+                    &lt;p>메모&lt;/p>
+                &lt;/div>
+                &lt;div class="value">
+                    &lt;p>{{ amount }}원&lt;/p>
+                    &lt;p>{{ type }}&lt;/p>
+                    &lt;p>{{ category }}&lt;/p>
+                    &lt;p>{{ content }}&lt;/p>
+                &lt;/div>
+            &lt;/div>
+            &lt;div class="btn">
+                &lt;button class="btn btn-success" @click="update">수정&lt;/button>
+                &lt;button class="btn btn-light" @click="check">확인&lt;/button>
+            &lt;/div>
+
+        &lt;/div>
+    &lt;/div>
+&lt;/template>
+&lt;script>
+import axios from "axios"
+/**
+ * CalendarInfo Vue.js component that shows detailed information for a specific transaction.
+ * @module CalendarInfo
+ */
+export default {
+    name: "CalendarInfo",
+    data() {
+        return {
+            /** @type {string} The amount of the transaction */
+            amount: "",
+            /** @type {Array&lt;string>} The creation date split into year, month, and day */
+            createAt: [],
+            /** @type {string} The type of the transaction (e.g., 입금, 출금) */
+            type: "",
+            /** @type {string} The category of the transaction */
+            category: "",
+            /** @type {string} The content or memo of the transaction */
+            content: "",
+            /** @type {string} CSS class for the background color based on the transaction type */
+            backgroundColor: "",
+            /** @type {string} CSS class for the alternative background color based on the transaction type */
+            backgroundColor2: "",
+            /** @type {string} The account ID for the transaction */
+            accountId: ''
+        }
+    },
+    methods: {
+         /**
+         * Redirects to the account update page with the account ID as a parameter.
+         */
+        update(){
+            this.$router.push({name:'accountUpdate/accountId', params:{'accountId' : this.accountId}})
+        },
+         /**
+         * Navigates back to the previous page.
+         */
+        check() {
+            this.$router.back();
+        },
+        /**
+         * Fetches transaction details from the axios and updates the component state.
+         */
+        info() {
+            let url = 'http://localhost:3000/deposit?id=' + this.$route.params.id;
+            const getDeposit = async () => {
+                try {
+                    let result = await axios.get(url, {});
+                    let list = await result.data;
+                    let getEvent = [];
+                    for (let count in list) {
+                        let deposit = list[count];
+                        this.accountId = deposit.id;
+                        this.amount = deposit.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        this.createAt = deposit.createAt.split("-");
+                        this.type = deposit.type;
+                        this.category = deposit.category;
+                        this.content = deposit.content;
+                        this.backgroundColor = this.type == "입금" ? "btn btn-warning" : "btn btn-secondary";
+                        this.backgroundColor2 = this.type == "출금" ? "btn btn-warning" : "btn btn-secondary";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+            getDeposit();
+        }
+    },
+    mounted() {
+        this.info();
+    }
+}
+&lt;/script>
+&lt;style scoped>
+.key {
+    float: left;
+    width: 50%;
+    text-align: right;
+    padding-right: 5%;
+}
+
+.value {
+    float: left;
+    width: 50%;
+    text-align: left;
+    padding-left: 5%;
+}
+
+.information {
+    padding-top: 30px;
+    font-size: 1.32rem
+}
+
+.btn {
+    width:100%;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.box {
+    background-color: white;
+    margin: 80px auto;
+    max-width: 500px;
+    min-width: 100px;
+    min-height: 350px;
+    padding: 10px 10px 10px 10px;
+}
+
+.createAt {
+    display: inline-block;
+    padding: 10px;
+}
+
+.date {
+    font-size: 1.5rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarDayInfo.html">CalendarDayInfo</a></li><li><a href="module-CalendarInfo.html">CalendarInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jun 12 2024 15:36:40 GMT+0900 (대한민국 표준시)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
