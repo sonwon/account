@@ -32,6 +32,12 @@
                     />
                 </template>
             </Chart>
+            <table class="profit-table">
+                <tr>
+                    <th style="width: 40px; min-width: 40px; max-width: 40px; font-size: 12px; font-weight: bold;">순이익</th>
+                    <td :style="profitColor(d.순이익)" v-for="d in data">{{ d.순이익 }}</td>
+                </tr>
+            </table>
         </div>
         <div class="list-outer">
             <h3>최근 거래 내역</h3>
@@ -84,18 +90,18 @@ export default {
         //userID는 params 또는 부모컴포넌트로부터 받아오기
         this.userId = localStorage.getItem('userId');
         let chartData = [
-            { month : "Jan", 입금 : 0, 출금 : 0 },
-            { month : "Feb", 입금 : 0, 출금 : 0 },
-            { month : "Apr", 입금 : 0, 출금 : 0 },
-            { month : "Mar", 입금 : 0, 출금 : 0 },
-            { month : "May", 입금 : 0, 출금 : 0 },
-            { month : "Jun", 입금 : 0, 출금 : 0 },
-            { month : "Jul", 입금 : 0, 출금 : 0 },
-            { month : "Aug", 입금 : 0, 출금 : 0 },
-            { month : "Sep", 입금 : 0, 출금 : 0 },
-            { month : "Oct", 입금 : 0, 출금 : 0 },
-            { month : "Nov", 입금 : 0, 출금 : 0 },
-            { month : "Dec", 입금 : 0, 출금 : 0 },
+            { month : "Jan", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Feb", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Apr", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Mar", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "May", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Jun", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Jul", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Aug", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Sep", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Oct", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Nov", 입금 : 0, 출금 : 0, 순이익 : 0 },
+            { month : "Dec", 입금 : 0, 출금 : 0, 순이익 : 0 },
         ];
 
         //서버로부터 데이터 받아오기
@@ -117,6 +123,9 @@ export default {
                     else{
                         chartData[month_number-1].출금 += parseInt(data.amount);
                     }
+                })
+                chartData.forEach((data)=>{
+                    data.순이익 = data.입금 - data.출금;
                 })
 
                 this.data = chartData;
@@ -164,6 +173,19 @@ export default {
             }
         }
     },
+    methods : {
+        profitColor : function(profit){
+            if(profit > 0){
+                return 'color : blue;'
+            }
+            else if(profit < 0){
+                return 'color : red;'
+            }
+            else{
+                return 'color : black;'
+            }
+        }
+    }
 }
 </script>
 <style scoped>
@@ -192,4 +214,13 @@ export default {
     .chart-outer{
         margin-bottom: 80px;
     }
+    .profit-table{
+        width : 778px;
+    }
+    .profit-table td{
+        width : 61.5px;
+        max-width: 61.5px;
+        font-size : 12px;
+    }
+
 </style>
