@@ -8,6 +8,8 @@
 
 <script>
 import SignInForm from './SignInForm.vue';
+import { useUserStore } from '@/components/pinia/UserStore';
+import { mapActions } from 'pinia';
 
 export default {
   name: 'SignIn',
@@ -23,6 +25,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useUserStore, ['setStoreUserName', 'setStoreUserId', 'setStoreIsLogin']),
     setForm({ name, value }) {
       this.formData[name] = value;
     },
@@ -32,9 +35,12 @@ export default {
         const data = await response.json();
         if (data.length > 0 && data[0].password === password) {
           const token = btoa(email);
-          localStorage.setItem('token', token);
-          localStorage.setItem('userId', data[0].id);
-          localStorage.setItem('userName', data[0].name)
+          localStorage.setItem('token', token, 0);
+          localStorage.setItem('userId', data[0].id, 0);
+          localStorage.setItem('userName', data[0].username, 0)
+          this.setStoreUserName(data[0].username);
+          this.setStoreUserId(data[0].id);
+          this.setStoreIsLogin("로그아웃");
           this.$router.push({ name: 'accountStatistics' });
         } else {
           console.log('Invalid login credentials');

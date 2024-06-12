@@ -11,6 +11,15 @@ import Calendar from "@/components/calendar/Calendar.vue";
 import CalendarInfo from "@/components/calendar/CalendarInfo.vue";
 import CalendarDayInfo from "@/components/calendar/CalendarDayInfo.vue";
 
+const accountIdGuard = (to, from) =>{
+  let userId = localStorage.getItem('userId');
+  if(userId == undefined){
+      return false;
+  }
+  else{
+      return true;
+  }
+}
 
 const router = createRouter({
     history : createWebHashHistory(),
@@ -28,6 +37,7 @@ const router = createRouter({
             path: '/my-page',
             name: 'MyPage',
             component: MyPage,
+            beforeEnter:accountIdGuard
           },
           {
             path: '/sign-up',
@@ -37,28 +47,32 @@ const router = createRouter({
         {
             path : '/accountRecord',
             name : 'accountRecord',
-            component : AccountRecord
+            component : AccountRecord,
+            beforeEnter:accountIdGuard
         },
         {
             path : '/accountRegistration',
             name : 'accountRegistration',
-            component : AccountRegistration
+            component : AccountRegistration,
+            beforeEnter:accountIdGuard
         },
         {
-            //acountStatistics화면 개발용으로 홈화면으로 놔둠
             path : '/accountStatistics',
             name : 'accountStatistics',
-            component : AccountStatistics
+            component : AccountStatistics,
+            beforeEnter:accountIdGuard
         },
         {
           path : '/accountUpdate/:accountId',
           name : 'accountUpdate/accountId',
-          component : AccountUpdate
+          component : AccountUpdate,
+          beforeEnter:accountIdGuard
         },
         {
             path: '/Calendar',
             name: 'Calendar',
             component: Calendar,
+            beforeEnter:accountIdGuard,
             children: [
                 {
                     path: '/:id',
@@ -73,5 +87,7 @@ const router = createRouter({
         }
     ]
 });
+
+
 
 export default router;
