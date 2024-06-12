@@ -49,9 +49,7 @@
     import InputFormItem from '../common/InputFormItem.vue';
     import { isEmail, isPassword } from '../../functions/validator.js';
     import axios from 'axios';
-    import { useUserStore } from '../pinia/UserStore';
-
-
+  
     export default {
       name: 'SignUpForm',
       components: {
@@ -81,11 +79,9 @@
       setup(props) {
         const email = ref(props.data.email);
         const username = ref(props.data.username);
-        const generation = ref(props.data.generation);
         const password = ref(props.data.password);
         const passwordConfirm = ref(props.data.passwordConfirm);
-        const store = useUserStore();
-
+    
         const isWarning = ref({
           email: false,
           password: false,
@@ -119,27 +115,27 @@
             const before_email = localStorage.getItem('token');
             const current_email = atob(before_email);
             await axios.get(`http://localhost:3000/users?email=${current_email}`)
-                .then((response) => {
-                    // id를 찾아서 userId에 저장
-                    console.log(response.data[0].id);
-                    userId = response.data[0].id
-                })
-                .catch((error) => {
-                    console.error('Error fetching user:', error);
-                });
+              .then((response) => {
+                // id를 찾아서 userId에 저장
+                console.log(response.data[0].id);
+                userId = response.data[0].id;
+              })
+              .catch((error) => {
+                console.error('Error fetching user:', error);
+              });
 
             const response = await axios.patch(`http://localhost:3000/users/${userId}`, {
-                email: email.value,
-                name: username.value,
-                password: password.value,
-          });
-          console.log('User created:', response.data);
-          // Redirect or handle successful sign-up here
+              email: email.value,
+              name: username.value,
+              password: password.value,
+            });
+            console.log('User created:', response.data);
+            // Redirect or handle successful sign-up here
 
-          const token = btoa(current_email);
-          localStorage.setItem('token', token);
-          localStorage.setItem('userName', username.value);
-          store.setStoreUserName(username.value);
+            const token = btoa(email.value);
+            localStorage.setItem('token', token);
+            localStorage.setItem('userName', username.value);
+
           alert('회원정보 수정이 완료되었습니다.');
         } catch (error) {
           console.error('Error creating user:', error);
