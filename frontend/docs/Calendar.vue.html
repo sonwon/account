@@ -1,34 +1,62 @@
-<template>
-    <div class="view">
-        <div class="FullCalendar">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Calendar.vue</title>
 
-            <FullCalendar :options="calendarOptions" />
-        </div>
-        <div class="filters">
-            <label>
-                <select style="background-color: white;" class="form-select" v-model="selectedEventType"
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Calendar.vue</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>&lt;template>
+    &lt;div class="view">
+        &lt;div class="FullCalendar">
+
+            &lt;FullCalendar :options="calendarOptions" />
+        &lt;/div>
+        &lt;div class="filters">
+            &lt;label>
+                &lt;select style="background-color: white;" class="form-select" v-model="selectedEventType"
                     @change="filterEvents">
-                    <option value="">모든 내역</option>
-                    <option value="입금">입금</option>
-                    <option value="출금">출금</option>
-                </select>
-            </label>
-            <label class="selectbtn">
-                <button :style="{ backgroundColor: utilitiesClicked ? 'orange' : 'white' }" class="btn btn-light"
-                    @click="catagoryClick">공과금</button>
-                <button :style="{ backgroundColor: salaryClicked ? 'orange' : 'white' }" class="btn btn-light"
-                    @click="catagoryClick">월급</button>
-                <button :style="{ backgroundColor: livingClicked ? 'orange' : 'white' }" class="btn btn-light"
-                    @click="catagoryClick">생활금</button>
-                <button :style="{ backgroundColor: etcClicked ? 'orange' : 'white' }" class="btn btn-light"
-                    @click="catagoryClick">기타</button>
+                    &lt;option value="">모든 내역&lt;/option>
+                    &lt;option value="입금">입금&lt;/option>
+                    &lt;option value="출금">출금&lt;/option>
+                &lt;/select>
+            &lt;/label>
+            &lt;label class="selectbtn">
+                &lt;button :style="{ backgroundColor: utilitiesClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">공과금&lt;/button>
+                &lt;button :style="{ backgroundColor: salaryClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">월급&lt;/button>
+                &lt;button :style="{ backgroundColor: livingClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">생활금&lt;/button>
+                &lt;button :style="{ backgroundColor: etcClicked ? 'orange' : 'white' }" class="btn btn-light"
+                    @click="catagoryClick">기타&lt;/button>
 
-            </label>
-        </div>
-        <router-view />
-    </div>
-</template>
-<script>
+            &lt;/label>
+        &lt;/div>
+        &lt;router-view />
+    &lt;/div>
+&lt;/template>
+&lt;script>
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -50,11 +78,11 @@ import { useCalendarStore } from '../pinia/CalendarStore';
 export default {
     name: "Calendar",
     components: {
-        FullCalendar // make the <FullCalendar> tag available
+        FullCalendar // make the &lt;FullCalendar> tag available
     },
     data() {
         return {
-            userid: "",
+            userid: "645f",
             selectedEventType: '',
             originalEvents: [],
             utilitiesClicked: false,
@@ -82,7 +110,7 @@ export default {
             }
         }
     },
-
+    
     methods: {
         /**
          * Handles category button clicks.
@@ -99,7 +127,7 @@ export default {
                     else {
                         this.utilitiesClicked = true;
                         this.ClickedList.push(buttonText);
-                    }
+                    }                    
                     break;
                 case '월급':
                     if (this.salaryClicked) {
@@ -109,7 +137,7 @@ export default {
                     else {
                         this.salaryClicked = true;
                         this.ClickedList.push(buttonText);
-                    }
+                    }                    
                     break;
                 case '생활금':
                     if (this.livingClicked) {
@@ -119,7 +147,7 @@ export default {
                     else {
                         this.livingClicked = true;
                         this.ClickedList.push(buttonText);
-                    }
+                    }                    
                     break;
                 case '기타':
                     if (this.etcClicked) {
@@ -132,20 +160,20 @@ export default {
                     }
                     break;
             }
-
+            
             if (this.selectedEventType) {
                 if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType).filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
                 else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
-            } else {
+            } else {             
                 if (this.ClickedList.length != 0) this.calendarOptions.events = this.originalEvents.filter(event => this.ClickedList.indexOf(event.title) !== -1); // ClickedList에 포함된 이벤트들만 필터링
                 else if (this.ClickedList.length == 0) this.calendarOptions.events = this.originalEvents.filter(event => event.type === this.selectedEventType);
-            }
+            }            
 
 
         },
-        /**
-        * Filters events based on selected event type.
-        */
+         /**
+         * Filters events based on selected event type.
+         */
         filterEvents() {
             console.log(this.originalEvents.filter(event => event.type === this.selectedEventType));
             if (this.selectedEventType) {
@@ -159,6 +187,7 @@ export default {
          * @param {Object} clickInfo - The click information.
          */
         handleEventClick(clickInfo) {
+            //라우터 연결 부분, 추후 라우터 가드 설정하기. id가 사용자 id가 맞는지 확인
             this.$router.push({ name: 'Calendar/id', params: { id: clickInfo.event.id } })
         },
         /**
@@ -182,7 +211,6 @@ export default {
         }
     },
     mounted() {
-        this.userid = localStorage.getItem('userId');
         this.store.clear();
         let url = 'http://localhost:3000/deposit?userId=' + this.userid;
         const getDeposit = async () => {
@@ -201,18 +229,17 @@ export default {
             catch (err) {
                 console.log(err);
             }
-            this.originalEvents = this.store.CalendarList;
-            this.calendarOptions.events = this.store.CalendarList;
-            console.log(this.store.CalendarList);
         }
+        getDeposit();
+
     },
     setup() {
         const store = useCalendarStore();
         return { store }
     }
 }
-</script>
-<style scoped>
+&lt;/script>
+&lt;style scoped>
 .fc .today {
     background-color: #D1E7DD !important;
 }
@@ -250,4 +277,28 @@ button {
 label {
     margin-left: 20px
 }
-</style>
+
+&lt;/style>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-CalendarDayInfo.html">CalendarDayInfo</a></li><li><a href="module-CalendarInfo.html">CalendarInfo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jun 12 2024 15:36:40 GMT+0900 (대한민국 표준시)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -23,21 +23,34 @@
 <script>
 import axios from "axios";
 import { useCalendarStore } from "../pinia/CalendarStore";
+/**
+ * CalendarDayInfo Vue.js component that shows transaction details for a specific date.
+ * @module CalendarDayInfo
+ * @vue-prop {string} createAt - The date of the transactions.
+ * @vue-prop {string} userid - The user ID.
+ * @vue-prop {Array} transactionDetails - The list of transaction details.
+ */
 export default {
     name: "CalendarDayInfo",
     data() {
-        return {
+        return {            
             createAt: "",
+            /** @type {string} The user ID */
             userid: "",
+            /** @type {string} The date of the transactions */
             date: "",
+            /** @type {Array<Object>} The list of transaction details */
             transactionDetails: []
         }
     },
     methods: {
         deletedetail : async function (detail) {
             await axios.delete(`http://localhost:3000/deposit/${detail.id}`);
+            /**
+             * Deletes a transaction detail.
+             * @param {Object} detail - The transaction detail to delete.
+             */
             this.store.delete(detail);
-
             this.transactionDetails = this.store.getDailyDetails(this.date);
             try{
                 let userJson = await axios.get(`/api/users/${this.userid}`);
@@ -56,6 +69,9 @@ export default {
                 console.log(err);
             }
         },
+        /**
+         * Navigates back to the previous page.
+         */
         check() {
             this.$router.back();
         },
