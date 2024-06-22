@@ -9,3 +9,5 @@ frontend 실행
 1. cd frontend
 2. npm i
 3. npm run dev
+
+README 수정 / github 교육
